@@ -1,0 +1,123 @@
+<include file="public@header"/>
+<include file="public@modelJs"/>
+
+<style>
+    .pagination{
+        margin: 5px 0px;
+    }
+    .node_name{
+        font-size: 15px;
+    }
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">所有设备</a></li>
+        <li><a href="{:url('Equipment/add')}">添加设备</a></li>
+
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('Equipment/index')}">
+        <include file="public@search"/>
+        <include file="public@model"/>
+    </form>
+    <form class="js-ajax-form" action="" method="post">
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                </th>
+                <th>领用单位号</th>
+                <th>领用单位名</th>
+                <th>仪器编号</th>
+                <th>分类号</th>
+                <th>仪器名称</th>
+                <th>型号</th>
+                <th>领用人</th>
+                <th>经手人</th>
+                <th>价格</th>
+                <th>入库时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+                <foreach name="data" item="vo" >
+                    <tr>
+                            <td>
+                                {$vo['receive_id']}
+                            </td>
+                            <td>
+                                {$vo['receive_name']}
+                            </td>
+                           <td>
+                               {$vo['equip_id']}
+                           </td>
+                            <td>
+                                {$vo['sort_id']}
+                            </td>
+                            <td>
+                                {$vo['equip_name']}
+                            </td>
+
+                            <td>
+                                {$vo['model']}
+                            </td>
+
+                            <td>
+                                {$vo['employer']}
+                            </td>
+                            <td>
+                                {$vo['dealer']}
+                            </td>
+                            <td>
+                                {$vo['price']}
+                            </td>
+                            <td>
+                                {$vo['torage_time']}
+                            </td>
+
+                        <td>
+                            <a class=" btn btn-xs btn-primary"  href="{:url('Equipment/edit',array('equip_id'=>$vo['equip_id']))}">{:lang('EDIT')}</a>
+                        </td>
+                    </tr>
+                </foreach>
+
+
+        </table>
+        <notempty name="equipPrice">
+            <div style="margin-top: 15px; margin-bottom: 5px;font-size: larger" >
+                共：{$equipPrice[0]['num']} 件设备；总共价值:  {$equipPrice[0]['price']} 元；
+
+            </div>
+
+        </notempty>
+
+        <ul class="pagination">{$page|default=''}</ul>
+    </form>
+
+    <form method="post"  action="{:url('Equipment/export')}" >
+        <input type="hidden" name="receive_id" value="{$receive_id}" >
+        <input type="hidden" name="order" value="{$order}" >
+        <input type="hidden" name="start_time" value="{$start_time}">
+        <input type="hidden" name="end_time" value="{$end_time}">
+        <input type="hidden" name="start_price" value="{$start_price}">
+        <input type="hidden" name="end_price" value="{$end_price}">
+        <input type="hidden" name="keyword" value="{$keyword}">
+        <button class="btn btn-info js-ajax-submit" type="submit">筛选数据导出Excel</button>
+
+    </form>
+
+   </div>
+<script>
+    $(document).ready(function() {
+        $("#clear").click(function () {
+            $(".dwName").val("").trigger("change");
+            $("input[name='start_time']").val('')
+            $("input[name='end_time']").val('')
+            $("input[name='keyword']").val('')
+        });
+    })
+
+</script>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

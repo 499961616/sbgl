@@ -1,0 +1,73 @@
+<include file="public@header"/>
+<include file="public@model"/>
+<include file="public@modelJs"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">批量修改</a></li>
+    </ul>
+
+    <form class="well form-inline margin-top-20" method="post" action="{:url('EquipChange/BatchUnitEdit')}">
+        <include file="public@search"/>
+        <include file="public@data"/>
+
+        <form action="{:url('EquipChange/UnitEdit')}" class="form-inline form-horizontal js-ajax-form" method="post" >
+
+            <div class="well form-inline" style="margin-top: -20px">
+                <notempty name="equipPrice">
+                    <div style="font-size: 15px; margin-bottom: 5px" >
+                        共：{$equipPrice[0]['num']} 件设备；总共价值:  {$equipPrice[0]['price']} 元；
+                    </div>
+                </notempty>
+                变动时间:
+                <input class="form-control" type="text" style="width: 120px" name="change_date"
+                       value="{:date('Y.m.d',time())}">&nbsp; &nbsp;
+
+
+                转入单位：
+                <td>
+                    <input type="text" class="form-control transfer-unitName"  name="transfer_unitName" value="{$transfer_unitName|default=''}" style="width: 180px;"required readonly>
+                    <input type="hidden" class="transfer_unit"  name="transfer_unit" value="{$transfer_unit|default=''}" >
+                    <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModal2" type="submit" >单位选择</a>
+
+                    </tr>
+                </td>
+                变动原因:
+                <input type="text" class="form-control" name="where" style="width: 400px;"
+                       value="{$where|default=''}">
+
+                <input type="hidden" name="receive_id"  value="{$receive_id}" >
+                <input type="hidden" name="receive_name"  value="{$receive_name}" >
+                <input type="hidden" name="order"  value="{$order}" >
+                <input type="hidden" name="start_time"   value="{$start_time|default=''}">
+                <input type="hidden" name="end_time"   value="{$end_time|default=''}">
+                <input type="hidden" name="equip_id_from" value="{$equip_id_from|default=''}">
+                <input type="hidden" name="equip_id_to" value="{$equip_id_to|default=''}">
+                <input type="hidden" name="start_price" value="{$start_price|default=''}">
+                <input type="hidden" name="end_price" value="{$end_price|default=''}">
+                <input type="hidden" name="keyword" value="{$keyword|default=''}" >
+                <button type="submit" class="btn btn-primary js-ajax-submit" style="margin-left: 20px" >确定变动处理</button>
+
+
+
+            </div>
+        </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#clear").click(function () {
+            $(".dwName").val("").trigger("change");
+            $("input[name='start_time']").val('')
+            $("input[name='end_time']").val('')
+            $("input[name='equip_id_from']").val('')
+            $("input[name='equip_id_to']").val('')
+            $("input[name='keyword']").val('')
+        });
+    })
+
+</script>
+<script src="__STATIC__/js/admin.js"></script>
+
+</body>
+</html>

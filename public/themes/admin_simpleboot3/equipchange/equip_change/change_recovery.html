@@ -1,0 +1,311 @@
+<include file="public@header"/>
+<style type="text/css">
+    .pic-list li {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">变动恢复</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20 js-ajax-form" method="post" action="{:url('EquipChange/changeRecovery')}">
+        仪器编号：
+        <input type="text" class="form-control" name="equipId" style="width: 200px;"
+               value="{$equip_id|default=''}" placeholder="请输入仪器编号...">
+        <input type="submit" class="btn btn-primary" value="搜索" id="sub" disabled/>
+        <a class="btn btn-danger" id="clear">清空</a>
+    </form>
+    <form action="{:url('EquipChange/Recovery')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+        <div class="row" style="width: 1300px">
+            <table class="table table-bordered">
+                <div class="col-md-offset-7">
+                    <tr>
+                        <th width="130">仪器编号<span class="form-required" >*</span></th>
+                        <td>
+                            <input type="text" class="form-control" required value="{$data['equip_id']}" name="equip_id" style="width: 150px" readonly  >
+                            <input type="hidden"  value="{$data['id']}" name="id"  >
+                        </td>
+                        <th width="130">入账时间<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control js-bootstrap-datetime" type="text" style="width: 250px" name="torage_time"
+                                   value="{$data['torage_time']}" disabled="disabled">
+                        </td>
+                        <th width="130">记账人<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" name="bookkeeper"  value="{$data['bookkeeper']}"  readonly>
+                        </td>
+                    </tr>
+                    <tr>
+
+
+                        <th width="130">分类号<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" name="sort_id"  value="{$data['sort_id']}"  readonly>
+                        </td>
+                        <th width="130">仪器名称<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" name="id"  value="{$data['id']}"  readonly>
+                        </td>
+                        <th width="130">仪器id<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" name="id"  value="{$data['id']}"  readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">领用单位号<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control " style=" width: 300px " name="receive_name" value="{$data['receive_name']}" readonly>
+                        </td>
+                        <th width="130">型号<span class="form-required">*</span></th>
+                        <td>
+
+                            <input type="text"  class="form-control"  name="model" value="{$data['model']}" readonly>
+                        </td>
+                        <th width="130">规格<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control" name="size"  value="{$data['size']}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">单价<span class="form-required">*</span></th>
+                        <td>
+                            <input type="number" class="form-control" name="price"   value="{$data['price']}" readonly>
+                        </td>
+                        <th width="130">厂家<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control" name="factory"  value="{$data['factory']}" readonly>
+                        </td>
+                        <th width="130">说明</th>
+                        <td>
+                            <input type="text" class="form-control" name="description" value="{$data['description']}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">使用单位<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="useunit_name" value="{$data['useunit_name']}" readonly>
+                        </td>
+                        <th width="130">购置日期<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control js-bootstrap-datetime" type="text"  name="purchase_date"
+                                   value="{$data['purchase_date']}" disabled="disabled">
+                        </td>
+                        <th width="130">供货商<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="supplier"  value="{$data['supplier']}"  readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">经费科目<span class="form-required">*</span></th>
+                        <td>
+                            <select class="form-control form-control-lg" name="funding_subjects" disabled="disabled" >
+                                <foreach name="funding_subjects" item="vo" key="key">
+                                    <php>$selected =substr($data['funding_subjects'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
+
+                        </td>
+                        <th width="130">使用方向<span class="form-required">*</span></th>
+                        <td>
+                            <select class="form-control form-control-lg" name="use_direction" disabled="disabled">
+                                <foreach name="use_direction" item="vo" key="key">
+                                    <php>$selected =substr($data['use_direction'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th width="130">仪器来源<span class="form-required">*</span></th>
+                        <td>
+
+                            <select class="form-control form-control-lg" name="instrument_source" disabled="disabled">
+
+                                <foreach name="instrument_source" item="vo" key="key">
+                                    <php> $selected = $data['instrument_source'] == $key+1   ? 'selected' : "" ; </php>
+                                    <option value="{$key+1}"  {$selected} > {$vo}</option>
+                                </foreach>
+
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">单据号</th>
+                        <td>
+                            <input type="text" class="form-control"  value="{$data['document_num']}" name="document_num" readonly>
+                        </td>
+
+
+                        <th width="130" >经手人</th>
+                        <td>
+                            <select class="form-control form-control-lg"  id="dealer" name="dealer" disabled="disabled" readonly>
+                                <option value="{$data['dealer']}">{$data['dealer']}</option>
+                            </select>
+                        <th width="130">存放点</th>
+                        <td>
+                            <input type="text" class="form-control" name="storage_location" value="{$data['storage_location']}" readonly>
+                        </td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">出厂号</th>
+                        <td>
+                            <input type="text" class="form-control" name="factory_num" value="{$data['factory_num']}" readonly>
+                        </td>
+
+                        <th width="130">国别码</th>
+                        <td>
+                            <input type="text" class="form-control"  name="country" value="{$data['country']}" readonly>
+                        </td>
+
+                        <th width="130">备注</th>
+                        <td>
+                            <textarea style="width: 250px" name="remark"  readonly="readonly" >{$data['remark']}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130" style="color: red">现状<span class="form-required">*</span></th>
+                        <td >
+                            <input type="hidden" name="status" value="{$data['status']}">
+                            <select class="form-control form-control-lg status " name="status" disabled="disabled">
+                                <foreach name="status" item="vo" key="key">
+                                    <php>$selected =substr($data['status'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
+                        </td>
+
+                        <th width="130" style="color: red">领用人<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="employer" value="{$data['employer']}" readonly>
+                        </td>
+                    <if  condition="$data['change_price'] neq ''">
+
+                        <th width="130" style="color: red">变动价格<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="change_price" value="{$data['change_price']}" readonly>
+                        </td>
+                    </if>
+
+                    </tr>
+                    <tr>
+                        <th width="130" style="color: red">转入单位<span class="form-required">*</span></th>
+                        <td>
+                               <input type="text" class="form-control"  name="transfer_unit_name" value="{$data['transfer_unit_name']}" readonly>
+
+                        </td>
+                        <th width="130" style="color: red">本设备变动次数<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text"  class="form-control"  name="employer" value="{$count}" readonly>
+                        </td>
+                        <th width="130" style="color: red">变动日期<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text"  class="form-control"  name="change_date" value="{$data['change_date']}" readonly>
+                        </td>
+                    </tr>
+
+                </div>
+            </table>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-7 ">
+                <if condition="substr($data['change_date'],0,4)  == date('Y') ">
+                    <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModal" type="submit" >变动恢复</a>
+                    <else />
+                    <button class="btn  btn-info"  disabled>仪器变动不再本期内，不能恢复！</button>
+                </if>
+
+                <notempty name="pre">
+                    <a class="btn btn-primary" href="{:url('EquipChange/changeRecovery', array('id' => $pre['id'],'equip_id'=> $pre['equip_id'] ))}">上一条</a>
+                    <else />
+                    <a class="btn btn-default disabled" href="#">没有上一条了</a>
+                </notempty>
+
+                <notempty name="next">
+                    <a class="btn btn-primary" href="{:url('EquipChange/changeRecovery', array('id' => $next['id'], 'equip_id' => $next['equip_id']))}">下一条</a>
+                    <else />
+                    <a class="btn btn-default disabled" href="#">没有下一条了</a>
+                </notempty>
+            </div>
+        </div>
+
+        <!-- 提示框  -->
+        <!-- Modal -->
+        <div class="modal fade " id="myModal" tabindex="-1" style="margin-top: 120px" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">变动提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <if condition="($data['change_price'] neq '')">您想恢复的的数据仪器编号为：<b style="color: red">{$data['equip_id']}</b>&nbsp;&nbsp;已做单价变动，单价变动为  {$data['change_price']}&nbsp;,是否恢复？
+
+                            <elseif condition="($data['transfer_unit_name'] neq '')"/>  您想恢复的的数据仪器编号为：<b style="color: red">{$data['equip_id']}</b>
+                            做转出操作：从 <b style="color: red">{$data['receive_id']}</b> &nbsp;转入 <b style="color: red">{$data['transfer_unit_name']}</b>,&nbsp;&nbsp;是否操作？
+
+                            <elseif condition="($data['status'] eq '7' && $data['change_price'] eq '' )"/>  您想恢复的的数据仪器编号为：<b style="color: red">{$data['equip_id']}</b>&nbsp;&nbsp;已经调出，是否恢复？
+
+                            <else />
+                        </if>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary js-ajax-submit">确认变动</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+<script>
+    $(document).ready(function() {
+        //清除按钮
+        $("#clear").click(function () {
+            $("input[name='equipId']").val('')
+        });
+
+        //判断现状的值
+        $('select.status').change( function (){
+
+            let  status =  $('select.status').val();
+
+            //当变动为这几种情况是 要填写去向 其他情况就不用
+            if(status == 5 || status == 6 ||status == 7 ||status == 'C'||status == 'D'){
+                if (status == 'C') {
+                    $('#where').show();
+                    $('#status').show();
+                }else{
+                    $('#where').hide();
+                }
+            }else {
+                $('#where').hide();
+                $('#where').hide();
+            }
+        });
+        $("input[name=equipId]").on("input",function(evt){
+            if($(this).val().trim().length){
+
+                $("#sub").removeAttr("disabled");
+            }else{
+                $("#sub").prop("disabled","disabled");
+            }
+        });
+    })
+
+</script>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+
+</script>
+
+
+
+</body>
+</html>

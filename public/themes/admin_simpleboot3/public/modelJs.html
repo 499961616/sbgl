@@ -1,0 +1,377 @@
+<!--单位选择 界面-->
+<script>
+    $(document).ready(function (){
+    let zTree;
+
+    <!--主机设备管理首页界面 单位选择 -->
+    let setting = {
+        view: {
+        dblClickExpand: false,
+        showLine: true,
+        selectedMulti: false
+    },
+        data: {
+            simpleData: {
+            enable:true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: ""
+            },
+            key: {
+                name: "names"
+            }
+
+    },
+        callback: {
+            beforeClick: function(treeId, treeNode) {
+            let zTree = $.fn.zTree.getZTreeObj("tree");
+            if (treeNode.isParent) {
+                zTree.expandNode(treeNode);
+                return false;
+            } else {
+                return true;
+            }
+         },
+        onDblClick:  function zTreeOnDblClick(event, treeId, treeNode) {
+            console.log(treeNode)
+            $(".receive_id").attr('value',treeNode.id)
+            // $(".secondUnit_id").attr('value',treeNode.id)
+            $(".receive_name").attr('value',treeNode.names)
+            // $(".secondUnit_name").attr('value',treeNode.id+'-'+treeNode.name)
+            $('#myModal').modal('hide');//隐藏modal
+
+            }
+        }
+    };
+
+
+    <!--主机设备管理设备添加界面 领用单位选择 -->
+    let myModalAdd = {
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable:true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            },
+            key: {
+                name: "names"
+            }
+        },
+        callback: {
+            beforeClick: function(treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj("tree");
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            onDblClick:  function zTreeOnDblClick(event, treeId, treeNode) {
+                if (treeNode.isParent) {
+                    alert('您选择的单位编号有下级单位，请将设备定位到下级单位')
+                    return false
+                }else
+                    $("#receive_id").attr('value',treeNode.id)
+                    $("#receive_name").attr('value',treeNode.names)
+                    $('#myModalAdd').modal('hide');//隐藏modal
+
+                    //获取单位id
+                    let id = treeNode.id;
+                    let datas
+
+                    $.ajax({
+                        url: '/api/equipment/employer', async: false, type: "get",data: {'id': id}, dataType: "json",
+                        success: function (data) {
+                            datas = data;
+                        }
+                    })
+
+                // 获取单位id 下面所有的管理老师
+                    $.ajax({url:"/api/equipment/employer", dataType: "JSON", data: {'id': id}, type: "GET",
+                        success:function (data) {
+                            var gradeNum= data.length;
+                            var option = "<option value=''>请选择人员</option>";
+                            if(gradeNum>0){
+                                $('#employer').select2({tags: true,});
+                                $('#dealer').select2({tags: true,});
+                                for(var i = 0;i<gradeNum;i++){
+                                    option += "<option value='"+data[i].name+"'>"+data[i].name+"</option>";
+                                }
+                            }else{
+                                $('#employer').select2({tags: true,});
+                                $('#dealer').select2({tags: true,});
+                                option = "<option value=''>没有找到领用人 ，请输入领用人</option>";
+                            }
+                                $("#employer").html(option);
+                                $("#dealer").html(option);
+                                $("#employer").val(name); //编辑时绑定
+                                $("#dealer").val(name); //编辑时绑定
+                    },
+                        error:function(e) {
+                            layer.alert("系统异常，请稍候重试！");
+                        }
+                })
+            }
+        }
+    };
+
+    <!--主机设备管理设备添加界面 使用单位选择 -->
+    let myModalAddUse = {
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable:true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            },
+            key: {
+                name: "names"
+            }
+        },
+        callback: {
+            beforeClick: function(treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj("tree");
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            onDblClick:  function zTreeOnDblClick(event, treeId, treeNode) {
+                if (treeNode.isParent) {
+                    alert('您选择的单位编号有下级单位，请将设备定位到下级单位')
+                    return false
+                }else
+                    $(".useunit_num").attr('value',treeNode.id)
+                    $(".useunit_name").attr('value',treeNode.names)
+                    $('#myModalAddUse').modal('hide');//隐藏modal
+
+            }
+        }
+    };
+
+    //数据变动 转入单位配置信息
+    let setting2 = {
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable:true,
+                idKey: "id",
+                pIdKey: "pId",
+                name: "names",
+                rootPId: ""
+            },
+            key: {
+                name: "names"
+            }
+        },
+        callback: {
+            beforeClick: function(treeId, treeNode) {
+                let zTree = $.fn.zTree.getZTreeObj("tree");
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            onDblClick:  function zTreeOnDblClick(event, treeId, treeNode) {
+                if (treeNode.isParent) {
+                    alert('您选择的单位编号有下级单位，请将设备定位到下级单位')
+                    return false
+                } else
+                    $(".transfer_unit").attr('value', treeNode.id)
+                $(".transfer-unitName").attr('value', treeNode.names)
+                $('#myModal2').modal('hide');//隐藏modal
+
+            }
+        }
+    };
+
+
+    //单位管理 配置信息
+    let unitEdit = {
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false,
+
+        },
+        data: {
+            simpleData: {
+                enable:true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            },
+            key: {
+                name: "names"
+            }
+        },
+        callback: {
+
+            onClick:function(event, treeId, treeNode) {
+                console.log(treeNode.id)
+                $.ajax({url: '/api/equipment/equipId/'+treeNode.id, async: false, type: "get", dataType: "json",
+                    success: function (data) {
+                        // console.log(data)
+                        $("input[name='id']").attr('value', data.id)
+                        $("input[name='name']").attr('value',data.name)
+                        $("#unit_nature").val(data.unit_nature);
+                        $("#fund_subject").val(data.fund_subject);
+                        $("#use_direction").val(data.use_direction);
+                        $("input[name='create_date']").val(data.create_date)
+                        $("input[name='pId']").attr('value',data.pId)
+                    }
+                });
+                $('.addUnit').show()
+                $('.addUnits').hide()
+                $(".saveEdit").removeAttr("disabled");
+                $(".delUnit").removeAttr("disabled");
+            }
+
+        }
+    };
+
+    //单位管理人 配置信息
+    let unitEmpEdit = {
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false,
+
+        },
+        data: {
+            simpleData: {
+                enable:true,
+                idKey: "id",
+                pIdKey: "pId",
+                rootPId: ""
+            },
+            key: {
+                name: "names"
+            }
+        },
+        callback: {
+
+            onClick: function (event, treeId, treeNode) {
+                //下面有单位的不能创建领用人
+                if (treeNode.isParent) {
+                    $('.unitList').remove()
+                    $('.none').remove()
+                    $('.addEmployer').remove()
+                    $('.employer').append('<p class="none" style="font-size: 25px ;color: red;text-align: center">有子单位不能创建领用人,请在子单位创建</p>');
+
+                } else {
+                    //获取指定单位的领用人
+                    let names
+                    //设置同步
+                    $.ajaxSetup({async: false});
+                    //根据id 获取单位的所有领用人
+                    $.post("/api/equipment/dwEmployer/" + treeNode.id, function (data) {
+                        names = data;
+                    });
+                    //没有数据 则可以添加领用人
+                    if (names == '') {
+                        $('.unitList').remove()
+                        $('.none').remove()
+                        $('.addEmployer').remove()
+                        $('.unitId').remove()
+                        $('.employer').append('<p  class="none" style="font-size: larger;color: red;text-align: center">暂无人员</p>');
+                        $('.employer').append('<input type="hidden"  class="unitId" value="'+treeNode.id+'" >');
+                        $('.Employers').append('<button type="button" class="btn btn-primary addEmployer " style="margin:  20px " onclick="addEmployer(this)">添加领用人</button>\n');
+
+                    } else {
+                        $('.unitList').remove()
+                        $('.none').remove()
+                        $('.unitId').remove()
+                        $('.addEmployer').remove()
+                        //循环渲染 领用人列表
+                        for (let i = 0, l = names.length; i < l; i++) {
+                            $('.employer').append('<tr class="unitList">\n' +
+                                '<th width="80">领用单位:</th>\n' +
+                                '<td>\n' +
+                                '<input class="form-control form-control-lg "style="width: 250px" required readonly name="unitName" value="' + names[i]['unitId'] + '-' + names[i]['unitName'] + '">\n' +
+                                '<input type="hidden" name="id" value="' + names[i]['id'] + '">\n' +
+                                '</td>\n' +
+                                '<th width="80">领用人:</th>\n' +
+                                '<td>\n' +
+                                '<input class="form-control" id="' + 'Em' + names[i]['id'] + '"style="width: 140px" required value="' + names[i]['name'] + '">\n' +
+                                '</td>\n' +
+                                '<td>\n' +
+                                '<button type="button" class="btn btn-primary saveEmployer js-ajax-form" onclick="updateEmployer(this,' + names[i]['id'] + ')" >更新</button>\n' +
+                                '</td>\n' +
+                                '<td>\n' +
+                                '<a  class="btn btn-primary saveEmployer js-ajax-form" onclick="delEmployer(this,' + names[i]['id'] + ')" >删除</a>\n' +
+                                '</td>\n' +
+                                '</tr>');
+                        }
+                        $('.employer').append('<input type="hidden" class="unitId"  value="'+treeNode.id+'" >');
+                        $('.Employers').append('<button type="button" class="btn btn-primary addEmployer " style="margin: 20px" onclick="addEmployer(this)">添加领用人</button>\n');
+                    }
+                }
+            }
+        }
+    };
+
+    //获取单位信息
+    let  dwInfo
+    $.ajax({url: '/api/equipment/dwInfo', async: false, type: "get", dataType: "json",
+        success: function (data) {
+            dwInfo = data;
+        }
+    });
+
+    //默认第一个折叠扣打开
+    dwInfo[0].open=true
+
+
+        //设备主页 筛选搜索
+        let t = $("#tree");
+        $.fn.zTree.init(t, setting, dwInfo);
+
+        //设备添加编辑的 领用单位
+        let tree_add = $("#tree_add");
+        $.fn.zTree.init(tree_add, myModalAdd, dwInfo);
+
+        //设备添加编辑的 使用单位
+        let tree_add_use = $("#tree_add_use");
+        $.fn.zTree.init(tree_add_use, myModalAddUse, dwInfo);
+
+        //数据变动 转入单位配置信息
+        let t2 = $("#tree2");
+       $.fn.zTree.init(t2, setting2, dwInfo);
+
+        //单位管理 配置信息
+
+        let unit  = $("#unitEdit");
+        $.fn.zTree.init(unit, unitEdit, dwInfo);
+
+        //单位负责人管理 配置信息
+        let EmpEdit  = $("#unitEmployer");
+        $.fn.zTree.init(EmpEdit, unitEmpEdit, dwInfo);
+
+
+    })
+
+
+
+</script>
+

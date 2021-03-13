@@ -1,0 +1,268 @@
+<include file="public@header"/>
+<include file="public@model"/>
+<include file="public@modelJs"/>
+<style type="text/css">
+    .pic-list li {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('Equipment/index')}">所有设备</a></li>
+        <li ><a href="{:url('Equipment/add')}">添加设备</a></li>
+        <li class="active"><a href="#">修改设备</a></li>
+    </ul>
+
+    <form action="{:url('Equipment/save')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+
+        <div class="row" style="width: 1300px">
+            <table class="table table-bordered">
+                <div class="col-md-offset-7">
+                    <tr>
+                        <th width="130">成批条数<span class="form-required">*</span></th>
+                        <td>
+                            <input type="number"  class="form-control" value="1" name="num" min="1" style="width: 150px" readonly>
+                        </td>
+                        <th width="130">入账时间<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control js-bootstrap-datetime" type="text" style="width: 250px" name="torage_time"
+                                   value="{$data['torage_time']}">
+                        </td>
+                        <th width="130">记账人<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" name="bookkeeper"  value="{$data['bookkeeper']}"  >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">仪器编号<span class="form-required" >*</span></th>
+                        <td>
+                            <input type="text" class="form-control" required value="{$data['equip_id']}" name="equip_id" style="width: 150px" readonly  >
+                        </td>
+
+                        <th width="130">分类号<span class="form-required">*</span></th>
+                        <td>
+                            <select class="equipNum form-control" style="width: 250px;"  name="sort_id" >
+
+                                <option value="{$data['sort_id']}" >{$data['sort_id']}</option>
+                                <option value="{$data['sort_id']}" >{$data['sort_id']}</option>
+                                <option value="{$data['sort_id']}" >{$data['sort_id']}</option>
+                            </select>
+                        </td>
+                        <th width="130">仪器名称<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" required class="equipName form-control"  value="{$data['equip_name']}" name="equip_name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">领用单位号<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control receive_name" id="receive_name" style="display: inline-block;width: 250px;" value="{$data['receive_name']}" required  readonly>
+                            <input type="hidden" class="receive_id" id="receive_id"  name="receive_id" value="{$data['receive_id']|default=''}" >
+                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAdd" type="submit" >单位选择</a>
+
+
+                        </td>
+                        <th width="130">型号<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text"  class="form-control"  name="model" value="{$data['model']}" >
+                        </td>
+                        <th width="130">规格<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control" name="size"  value="{$data['size']}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">单价<span class="form-required">*</span></th>
+                        <td>
+                            <input type="number" class="form-control" name="price"   value="{$data['price']}">
+                        </td>
+                        <th width="130">厂家<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control" name="factory"  value="{$data['factory']}" >
+                        </td>
+                        <th width="130">现状<span class="form-required">*</span></th>
+                        <td>
+
+                                <select class="form-control form-control-lg" name="status">
+                                    <foreach name="status" item="vo" key="key">
+                                    <php>$selected =substr($data['status'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
+                                        <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                    </foreach>
+                                </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">使用单位<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control useunit_name"  name="useunit_name" style="display: inline-block;width: 250px;"value="{$data['useunit_name']|default=''}" readonly>
+                            <input type="hidden" class="useunit_num"  name="useunit_num" value="{$data['useunit_num']|default=''}" >
+                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAddUse" type="submit" >单位选择</a>
+
+                        </td>
+                        </td>
+                        <th width="130">购置日期<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control js-bootstrap-datetime" type="text"  name="purchase_date"
+                                   value="{$data['purchase_date']}">
+                        </td>
+                        <th width="130">供货商<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="supplier"  value="{$data['supplier']}" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">经费科目<span class="form-required">*</span></th>
+                        <td>
+
+                            <select class="form-control form-control-lg" name="funding_subjects">
+                                <foreach name="funding_subjects" item="vo" key="key">
+                                    <php>$selected =substr($data['funding_subjects'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
+
+                        </td>
+                        <th width="130">使用方向<span class="form-required">*</span></th>
+                        <td>
+                            <select class="form-control form-control-lg" name="use_direction">
+                                <foreach name="use_direction" item="vo" key="key">
+                                    <php>$selected =substr($data['use_direction'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
+                        </td>
+                        <th width="130">仪器来源<span class="form-required">*</span></th>
+                        <td>
+
+                            <select class="form-control form-control-lg" name="instrument_source">
+
+                                <foreach name="instrument_source" item="vo" key="key">
+                                   <php> $selected = $data['instrument_source'] == $key+1   ? 'selected' : "" ; </php>
+                                    <option value="{$key+1}"  {$selected} > {$vo}</option>
+                                </foreach>
+
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">单据号</th>
+                        <td>
+                            <input type="text" class="form-control"  value="{$data['document_num']}" name="document_num">
+                        </td>
+
+                        <th width="130">领用人</th>
+                        <td>
+                            <select class="form-control form-control-lg" id="employer" name="employer"  required>
+                                <option value="{$data['employer']}">{$data['employer']}</option>
+                            </select>
+                        </td>
+                        <th width="130" >经手人</th>
+                        <td>
+                            <select class="form-control form-control-lg"  id="dealer" name="dealer" required>
+                                <option value="{$data['dealer']}">{$data['dealer']}</option>
+                            </select>
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">出厂号</th>
+                        <td>
+                            <input type="text" class="form-control" name="factory_num" value="{$data['factory_num']}">
+                        </td>
+
+                        <th width="130">国别码<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="country" value="{$data['country']}">
+                        </td>
+
+                        <th width="130">备注<span class="form-required">*</span></th>
+                        <td>
+                            <textarea style="width: 250px" name="remark">{$data['remark']}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">存放点</th>
+                        <td>
+                            <input type="text" class="form-control" name="storage_location" value="{$data['storage_location']}">
+                        </td>
+                        <th width="130">说明</th>
+                        <td>
+                            <input type="text" class="form-control" name="description" value="{$data['description']}">
+                        </td>
+
+                    </tr>
+                </div>
+            </table>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-7 ">
+                <button type="submit" class="btn btn-primary js-ajax-submit" >更新</button>
+                <a class="btn btn-default" href="{:url('Equipment/index')}">{:lang('BACK')}</a>
+<!--                <a class="btn btn-default" href="{:url('Equipment/edit', ['prv_id' => $data['id']])}">上一条</a>-->
+<!--                <a class="btn btn-default" href="{:url('Equipment/edit',array('next_id' => $data['id']))}">下一条</a>-->
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function () {
+        //select2 div下拉样式
+        function formatTopic(topic) {
+            return "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__meta'>" +
+            "<div class='select2-result-repository__title'>" +
+            topic.name ? topic.name : "" +
+                "</div></div></div>"
+        }
+
+        function formatDwSelection(topic) {
+            return topic.name;
+        }
+
+        //绑定select2插件  分类名
+        $(".equipNum").select2({
+            tag:true,
+            minimumInputLength: 1,
+            language: {
+                noResults: function (params) {
+                    return "暂无数据";
+                }
+            },
+            ajax: {
+                url: '/api/equipment/equipName',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    return {
+                        results: data
+                    };
+                },
+                language: {
+                    noResults: function (params) {
+                        return "暂无数据";
+                    }
+                },
+                cache: true
+            },
+            templateResult: formatTopic,
+            templateSelection: formatDwSelection,
+            escapeMarkup: function (markup) { return markup; }
+        })
+        let sort_id = $('.equipNum').select2('val')
+        $(".select2-selection__rendered").html(sort_id)
+    })
+
+</script>
+</body>
+</html>

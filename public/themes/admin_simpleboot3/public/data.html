@@ -1,0 +1,73 @@
+<!--数据循环渲染-->
+<form class=" form-inline"  >
+    <table class="table table-hover table-bordered table-list">
+        <thead>
+        <tr>
+            <th>仪器编号</th>
+            <th>领用单位号</th>
+            <th>领用单位名</th>
+            <th>仪器名称</th>
+            <th>型号</th>
+            <th>领用人</th>
+            <th>入库时间</th>
+            <th>单价</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <empty name="data">
+            <p  style="font-size:large;text-align: center; padding: 300px 200px;color: red">暂无数据</p>
+            <else />
+            <foreach name="data" item="vo"  >
+                <tr>
+
+                    <td>
+                        {$vo['equip_id']}
+                    </td>
+                    <td>
+                        {$vo['receive_id']}
+                    </td>
+                    <td>
+                        {$vo['receive_name']}
+                    </td>
+                    <td>
+                        {$vo['equip_name']}
+                    </td>
+                    <td>
+                        {$vo['model']}
+                    </td>
+                    <td>
+                        {$vo['employer']}
+                    </td>
+                    <td>
+                        {$vo['torage_time']}
+                    </td>
+                    <td>
+                        {$vo['price']}
+                    </td>
+                    <td>
+                        <switch name="$vo['status']">
+                            <case value="1">在用</case>
+                            <case value="2">多余</case>
+                            <case value="3">待修</case>
+                            <case value="4">带报废</case>
+                            <case value="5">丢失</case>
+                            <case value="6">报废</case>
+                            <case value="7">调出</case>
+                            <case value="8">降档</case>
+                            <case value="9">其他</case>
+                            <case value="A">调入</case>
+                            <case value="B">转入</case>
+                            <case value="C">转出</case>
+                            <case value="D">退库</case>
+                        </switch>
+                    </td>
+
+                </tr>
+            </foreach>
+        </empty>
+
+    </table>
+    <ul class="pagination">{$page|default=''}</ul>
+
+
+</form>

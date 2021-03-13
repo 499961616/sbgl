@@ -1,0 +1,285 @@
+<include file="public@header"/>
+<include file="public@model"/>
+<include file="public@modelJs"/>
+<style type="text/css">
+    .pic-list li {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('Equipment/index')}">所有设备</a></li>
+        <li class="active"><a href="{:url('Equipment/add')}">添加设备</a></li>
+    </ul>
+    <form action="{:url('Equipment/addPost')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+
+        <div class="row" style="width: 1300px">
+                <table class="table table-bordered">
+                    <div class="col-md-offset-7">
+                    <tr>
+
+                        <th width="130">成批条数<span class="form-required">*</span></th>
+                        <td>
+                            <input type="number"  class="form-control" value="1" name="num" min="1" style="width: 150px">
+                        </td>
+                        <th width="130">入账时间<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" style="width: 250px" name="torage_time"
+                                   value="{:date('Y.m.d',time())}">
+                        </td>
+                        <th width="130">记账人<span class="form-required">*</span></th>
+                        <td>
+                            <input class="form-control" type="text" name="bookkeeper" form-required  >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">仪器编号<span class="form-required" >*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  value="{$newId}" name="equip_id" style="width: 150px" readonly  >
+                        </td>
+
+                        <th width="130">分类号<span class="form-required">*</span></th>
+                        <td>
+                            <select class="equipNum form-control" style="width: 250px;"  form-required name="sort_id" >
+
+                            </select>
+                            <input type="hidden" name="asset_types" value="">
+                        </td>
+                        <th width="130">仪器名称<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text"  class="equipName form-control" form-required name="equip_name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">领用单位号<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control receive_name" id="receive_name" style="display: inline-block;width: 250px;"  readonly>
+                            <input type="hidden" class="receive_id" id="receive_id"  name="receive_id" value="{$receive_id|default=''}" >
+                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAdd" type="submit" >单位选择</a>
+                        </td>
+                        <th width="130">型号<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text"  class="form-control"  name="model" >
+                        </td>
+                        <th width="130">规格<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control" name="size">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">单价<span class="form-required">*</span></th>
+                        <td>
+                            <input type="number" class="form-control" name="price"  >
+                        </td>
+                        <th width="130">厂家<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control" name="factory"  >
+                        </td>
+                        <th width="130">现状<span class="form-required">*</span></th>
+                        <td>
+                            <select class="form-control form-control-lg" name="status">
+                                <option value="1">在用</option>
+                                <option value="2">多余</option>
+                                <option value="3">待修</option>
+                                <option value="4">待报废</option>
+                                <option value="8">降档</option>
+                                <option value="9">其它</option>
+                                <option value="A">调入</option>
+                                <option value="B">转入</option>
+
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="130">使用单位<span class="form-required">*</span></th>
+                        <td>
+
+                            <input type="text" class="form-control useunit_name" style="display: inline-block;width: 250px;" readonly>
+                            <input type="hidden" class="useunit_num"  name="useunit_num" value="{$useunit_num|default=''}" >
+                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAddUse" type="submit" >单位选择</a>
+
+                        </td>
+
+                        <th width="130">领用人</th>
+                        <td>
+                            <select class="form-control form-control-lg"  id="employer" name="employer">
+
+                            </select>
+                        </td>
+                        <th width="130" >经手人</th>
+                        <td>
+                            <select class="form-control form-control-lg"  id="dealer" name="dealer">
+                                <option value="">请选择经手人</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                            <th width="130">经费科目<span class="form-required">*</span></th>
+                            <td>
+                                <select class="form-control form-control-lg" name="funding_subjects">
+                                    <option value="1">  教学</option>
+                                    <option value="2">  科研</option>
+                                    <option value="3">  基建</option>
+                                    <option value="4">  自筹</option>
+                                    <option value="5">  贷款</option>
+                                    <option value="6">  捐赠</option>
+                                    <option value="9">  其它</option>
+                                    <option value="10">  研究生</option>
+                                    <option value="11">  配套</option>
+                                    <option value="12">  行政</option>
+                                    <option value="13">  211经费</option>
+                                    <option value="14">  十五投资</option>
+                                    <option value="15">  985经费</option>
+
+                                </select>
+                            </td>
+                            <th width="130">使用方向<span class="form-required">*</span></th>
+                            <td>
+                                <select class="form-control form-control-lg" name="use_direction">
+                                    <option value="1">  教学</option>
+                                    <option value="2">  科研</option>
+                                    <option value="3">  行政</option>
+                                    <option value="4">  生活</option>
+                                    <option value="5">  生产</option>
+                                    <option value="6">  技术开发</option>
+                                    <option value="7">  社会服务</option>
+                                    <option value="9">  其他</option>
+
+                                </select>
+                            </td>
+                            <th width="130">仪器来源<span class="form-required">*</span></th>
+                            <td>
+                                <select class="form-control form-control-lg" name="instrument_source">
+                                    <option value="1" selected>购置</option>
+                                    <option value="2">捐赠</option>
+                                    <option value="3">自制</option>
+                                    <option value="4">校外掉入</option>
+                                </select>
+                            </td>
+                        </tr>
+                    <tr>
+
+                        <th width="130">单据号</th>
+                        <td>
+                            <input type="text" class="form-control" name="document_num" >
+                        </td>
+                        <th width="130">购置日期<span class="form-required">*</span></th>
+                        <td>
+
+                            <input class="form-control" type="text" style="width: 250px" name="purchase_date"
+                                   value="{:date('Y.m.d',time())}">
+                        </td>
+                        <th width="130">出厂日期<span class="form-required">*</span></th>
+                        <td>
+
+                            <input class="form-control" type="text" style="width: 250px" name="factory_date"
+                                   value="{:date('Y.m.d',time())}">
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <th width="130">出厂号</th>
+                        <td>
+                            <input type="text" class="form-control" name="factory_num">
+                        </td>
+
+                        <th width="130">国别码<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="country" value="中国">
+                        </td>
+
+                        <th width="130">供货商<span class="form-required">*</span></th>
+                        <td>
+                            <input type="text" class="form-control"  name="supplier" >
+                        </td>
+                    </tr>
+                    <tr>
+                            <th width="130">存放点</th>
+                            <td>
+                                <input type="text" class="form-control" name="storage_location">
+                            </td>
+                            <th width="130">说明</th>
+                            <td>
+                                <input type="text" class="form-control" name="description">
+                            </td>
+                        <th width="130">备注<span class="form-required">*</span></th>
+                        <td>
+                            <textarea style="width: 250px" name="remark"></textarea>
+                        </td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-7 ">
+                <button type="submit" class="btn btn-primary js-ajax-submit" >添加</button>
+                <button type="reset" class="btn btn-primary js-ajax-submit">重置</button>
+                <a class="btn btn-default" href="{:url('Equipment/index')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+<script>
+    $(function () {
+        //select2 div下拉样式
+        function formatTopic(topic) {
+            return "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__meta'>" +
+            "<div class='select2-result-repository__title'>" +
+            topic.name ? topic.name : "" +
+                "</div></div></div>"
+        }
+
+        function formatDwSelection(topic) {
+            return topic.name;
+        }
+
+
+        //绑定select2插件
+        $(".equipNum").select2({
+            tag: true,
+            minimumInputLength: 1,
+            language: {
+                noResults: function (params) {
+                    return "暂无数据";
+                }
+            },
+            ajax: {
+                url: '/api/equipment/equipName',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    return {
+                        results: data
+                    };
+                },
+                language: {
+                    noResults: function (params) {
+                        return "暂无数据";
+                    }
+                },
+                cache: true
+            },
+            templateResult: formatTopic,
+            templateSelection: formatDwSelection,
+            escapeMarkup: function (markup) {
+                return markup;
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

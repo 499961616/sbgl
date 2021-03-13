@@ -1,0 +1,137 @@
+<include file="public@header"/>
+<include file="public@modelJs"/>
+<style>
+    .ztree *{
+        font-size: 15px;
+    }
+</style>
+
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">单位调整</a></li>
+    </ul>
+    <div class="container margin-top-20"  style="background-color: #f5f5f5">
+        <div class="row  table-bordered">
+            <div class="col-xs-6 col-sm-4 table-bordered"  >
+
+                <div class="header " style="line-height: 50px;text-align: center ;font-size: larger;"><b>选择单位</b></div>
+                <hr>
+                <ul id="unitEmployer" class="ztree table-bordered" style=" overflow:auto;"></ul>
+            </div>
+            <div class="clearfix visible-xs"></div>
+
+            <div class="col-xs-6 col-sm-8 Employers" >
+
+                <form class="js-ajax-form" action="">
+                    <div class="row">
+                        <div class="header" style="line-height: 50px;text-align: center ;font-size: larger;"><b>单位人员管理</b></div>
+                        <hr>
+                        <div class="main">
+                            <table class="table table-bordered employer" >
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <!-- 提供额外的视觉效果，标识一组按钮中的原始动作 -->
+                     </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--//删除模态框-->
+<div class="modal fade" id="delUnit">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 隐藏需要删除的id -->
+                <input type="hidden" id="deleteHaulId" />
+                <p>您确认要删除该条信息吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        id="deleteHaulBtn">确认</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<script>
+
+        //删除
+        function delEmployer(obj,id) {
+            let flag = confirm("是否删除")
+
+            if (flag) {
+                $.post("/api/equipment/delEmployer/"+id,
+                    function (res) {
+                        if (res == 1) {
+                            $(obj).parent().parent().remove();
+                            alert("删除成功！")
+                        } else
+                            alert('删除失败');
+                    })
+            }
+        }
+
+        //更新
+        function updateEmployer(obj,id){
+        let   ID = 'Em'+id
+            //获取对应的值
+          let  name =   document.getElementById(ID).value;
+            $.post("/api/equipment/updateEmployer/",{'id':id,'name':name},
+                function (res) {
+                    if (res == 1) {
+                        alert("成功！")
+                    } else
+                        alert('失败');
+                })
+        }
+
+        //新建领用人
+        function  addEmployer(obj){
+
+            let unitId = $('.unitId').val();
+
+            $('.none').remove()
+            $('.Employers').append(
+                ' <form  action="{:url(\'UnitModify/addEmployer\')}" method="post" class="form-horizontal js-ajax-form ">\n' +
+                '<div class="row">\n' +
+                '<div class="main">\n' +
+                    '<table class="table table-bordered" >\n' +
+                    '<tr class="unitList">\n' +
+                    '<th width="80">领用单位:</th>\n' +
+                    '<td>\n' +
+                    '<input class="form-control form-control-lg "style="width: 250px" required readonly name="unitId" value="'+unitId+'">\n' +
+                    '</td>\n' +
+                    '<th width="80">领用人:</th>\n' +
+                    '<td>\n' +
+                    '<input class="form-control" id="employerName" style="width: 140px" name="unitName" required value="">\n' +
+                    '</td>\n' +
+                    '<td>\n' +
+                    '<button type="submit" class="btn btn-primary  js-ajax-submit" >新增</button>\n' +
+                    '</td>\n' +
+                    '</tr>' +
+                    '</table>' +
+                '</div>'+
+                '</div>'+
+                '</form>'
+
+            );
+        }
+
+
+
+
+</script>
+

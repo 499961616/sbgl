@@ -1,0 +1,273 @@
+<include file="public@header"/>
+<include file="public@modelJs"/>
+<style>
+    .ztree *{
+        font-size: 15px;
+    }
+</style>
+
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">单位调整</a></li>
+    </ul>
+    <div class="container margin-top-20"  style="background-color: #f5f5f5">
+        <div class="row  table-bordered">
+            <div class="col-xs-6 col-sm-6 table-bordered"  >
+
+                    <div class="header " style="line-height: 50px;text-align: center ;font-size: larger;"><b>查看单位</b></div>
+                <hr>
+                <ul id="unitEdit" class="ztree table-bordered" style=" overflow:auto;"></ul>
+            </div>
+            <div class="clearfix visible-xs"></div>
+
+            <div class="col-xs-6 col-sm-6" >
+
+                    <form class="js-ajax-form" action="">
+                        <div class="row">
+                            <div class="header" style="line-height: 50px;text-align: center ;font-size: larger;"><b>阳光学院单位管理</b></div>
+                            <hr>
+                            <table class="table table-bordered" >
+
+                                    <tr>
+                                        <th width="130">单位编号<span class="form-required">*</span></th>
+                                        <td>
+                                            <input type="text"  class="form-control" name="id" style="width: 150px" readonly>
+                                            <input type="hidden"  class="form-control" name="pId"   >
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <th width="130">单位名称<span class="form-required">*</span></th>
+                                        <td>
+                                            <input type="text"  class="form-control" name="name" required style="width: 150px;display: inline-block">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="130">单位性质<span class="form-required">*</span></th>
+                                        <td>
+                                            <select class="form-control form-control-lg" id="unit_nature">
+                                                <option value="1">1.教学</option>
+                                                <option value="2">2.科研</option>
+                                                <option value="3">3.行政</option>
+                                                <option value="4">4.后勤</option>
+                                                <option value="5">5.生产</option>
+                                                <option value="6">6.公司</option>
+                                                <option value="7">7.其它</option>
+                                            </select>
+                                        </td>
+                                        <th width="130">经费科目<span class="form-required">*</span></th>
+                                        <td>
+                                            <select class="form-control form-control-lg" id="fund_subject">
+                                            <option value="1">1.教学</option>
+                                            <option value="2">2.科研</option>
+                                            <option value="3">3.基建</option>
+                                            <option value="4">4.自筹</option>
+                                            <option value="5">5.贷款</option>
+                                            <option value="6">6.捐赠</option>
+                                            <option value="9">9.其它</option>
+                                            <option value="A">A.研究生</option>
+                                            <option value="B">B.配套</option>
+                                            <option value="C">C.行政</option>
+                                            <option value="D">D.211经费</option>
+                                            <option value="E">E.投资</option>
+                                            <option value="F">F.985经费</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="130">使用方向<span class="form-required">*</span></th>
+                                        <td>
+                                            <select class="form-control form-control-lg" id="use_direction">
+                                                <option value="1">1.教学</option>
+                                            <option value="1">1.教学</option>
+                                            <option value="2">2.科研</option>
+                                            <option value="3">3.行政</option>
+                                            <option value="4">4.生活</option>
+                                            <option value="5">5.生产</option>
+                                            <option value="6">6.技术开发</option>
+                                            <option value="7">7.社会服务</option>
+                                            <option value="9">9.其它</option>
+                                            </select>
+                                        </td>
+                                        <th width="130">建立年份<span class="form-required">*</span></th>
+                                        <td>
+                                            <input type="text"  class="form-control "  name="create_date">
+                                        </td>
+                                    </tr>
+                            </table>
+                        </div>
+                        <!-- 提供额外的视觉效果，标识一组按钮中的原始动作 -->
+                        <button type="button" class="btn btn-primary saveEdit js-ajax-form"  style="margin-right: 20px"  disabled>更新单位信息</button>
+                        <!-- 表示一个成功的或积极的动作 -->
+                        <button type="button" class="btn btn-success addUnit" style="margin-right: 20px;" >新增单位</button>
+                        <button type="button" class="btn btn-success addUnits"  style="margin-right: 20px;display: none" >确认新增</button>
+
+                        <!-- 表示一个危险的或潜在的负面动作 -->
+                        <button type="button" class="btn btn-danger delUnit js-ajax-form" style="margin-right: 20px" disabled>删除</button>
+
+                        <button type="submit" class="btn btn-default"style="margin-right: 20px">返回</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--//删除模态框-->
+<div class="modal fade" id="delUnit">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 隐藏需要删除的id -->
+                <input type="hidden" id="deleteHaulId" />
+                <p>您确认要删除该条信息吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        id="deleteHaulBtn">确认</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function (){
+        //更新单位信息
+      $('.saveEdit').click(function (){
+          let id = $("input[name='id']").val();
+          let pId = $("input[name='pId']").val();
+          let name = $("input[name='name']").val();
+          let unit_nature = $("#unit_nature").val();
+          let fund_subject = $("#fund_subject").val();
+          let use_direction = $("#use_direction").val();
+          let create_date =  $("input[name='create_date']").val();
+
+          let  data = {
+              "id":id,
+              "pId":pId,
+              "name":name,
+              "unit_nature":unit_nature,
+              "fund_subject":fund_subject,
+              "use_direction":use_direction,
+              "create_date" : create_date
+          }
+        $.post("/api/equipment/dwUpdate",data,function (data){
+            console.log(data)
+           if (data.code == 1){
+               alert('修改成功')
+
+           }else {
+               alert('修改失败，请重试')
+
+           }
+        })
+      })
+        //添加单位
+        $('.addUnit').click(function (){
+
+            let id = $("input[name='id']").val();
+            $("input[name='id']").attr('value', '')
+            //父节点
+             $("input[name='pId']").attr('value', id)
+            $("input[name='name']").attr('value','')
+            $("input[name='create_date']").val('')
+
+            let pId = $("input[name='pId']").val();
+
+            if (pId == ''){
+                alert('请选择单位')
+            }else {
+                let pId = $("input[name='pId']").val();
+                $.post("/api/equipment/dwNewId",{'pId':pId},function (data){
+                  //将新id 赋值上去
+                    $("input[name='id']").attr('value', data)
+                })
+                $('.addUnit').hide()
+                $('.addUnits').show()
+
+            }
+
+        })
+
+        //确认添加单位
+        $('.addUnits').click(function (){
+
+            let id = $("input[name='id']").val();
+            let pId = $("input[name='pId']").val();
+            let name = $("input[name='name']").val();
+            let unit_nature = $("#unit_nature").val();
+            let fund_subject = $("#fund_subject").val();
+            let use_direction = $("#use_direction").val();
+            let create_date =  $("input[name='create_date']").val();
+
+            if (pId == ''){
+                alert('请选择单位')
+            }else if(name == ''){
+                alert('请填写单位名称')
+            }else{
+            let  data = {
+                 'id':id,
+                "pId":pId,
+                "name":name,
+                "unit_nature":unit_nature,
+                "fund_subject":fund_subject,
+                "use_direction":use_direction,
+                "create_date" : create_date
+            }
+            $.post("/api/equipment/dwAdd",data,function (data){
+                if (data.code == 1){
+                    alert('新增成功')
+                    window.location.reload();
+                }else {
+                    alert('新增失败，请重试')
+                    window.location.reload();
+                }
+                $('.addUnits').hide()
+                $('.addUnit').show()
+            })
+            }
+
+        })
+
+        //删除单位
+        $('.delUnit').click(function (){
+
+            let r=confirm("确认删除吗？")
+            if (r==true)
+            {
+                let id = $("input[name='id']").val();
+
+                if (id == ''){
+                    alert('请选择单位')
+                }else{
+                    $.post("/api/equipment/dwDel",{id:id},function (data){
+
+                        if (data.code == 1){
+                            alert('删除成功')
+                            window.location.reload();
+                        }else {
+                            alert('删除失败，请重试')
+                            window.location.reload();
+                        }
+                        $('.addUnits').hide()
+                        $('.addUnit').show()
+                    })
+                }
+            }
+
+        })
+
+
+    })
+
+</script>
+

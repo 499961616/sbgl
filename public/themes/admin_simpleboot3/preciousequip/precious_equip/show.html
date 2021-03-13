@@ -1,0 +1,277 @@
+<include file="public@header"/>
+</head>
+<style>
+    .pagination{
+        position:fixed;
+        margin-top: 350px;
+    }
+</style>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">所有设备</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" style="text-align: center" method="post" action="{:url('PreciousEquip/show')}">
+        请输入贵重仪器使用学年:
+        <input type="number" class="form-control " name="start_time"
+               style="width: 100px;" value="{$startTime}">——
+
+        <input type="number" class="form-control " name="end_time"
+               style="width: 100px;"  value="{$endTime}">
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+        <a class="btn btn-danger" id="clear">清空</a>
+    </form>
+
+
+    <table class="table table-bordered  table-hover " style="width:340px; height: 400px;overflow-y: scroll;  position:absolute;" >
+        <thead>
+            <tr>
+                <th width="100">仪器编号</th>
+                <th width="260">领用单位</th>
+                <th width="240">仪器名称</th>
+            </tr>
+        </thead>
+        <tbody>
+        <foreach name="datas" item="vo" key ='k' >
+                <tr style="cursor: pointer" onclick="detail('{$vo[\'equip_id\']}')" >
+                <td>
+                    {$vo['equip_id']}
+                </td>
+                <td>
+                    {$vo['receive_name']}
+                </td>
+                <td >
+                    {$vo['equip_name']}
+                </td>
+            </tr>
+           </foreach>
+        </tbody>
+    </table>
+    <ul class="pagination">{$pages|default=''}</ul>
+    <form action="{:url('PreciousEquip/update')}" method="post" class="form-horizontal js-ajax-form  " style=" width:1180px;float: right; margin-right: 20px">
+
+        <input type="hidden" name="years" value="{$years}">
+        <div class="table-bordered ">
+        <div class="form-group ">
+            <label class="col-sm-1 control-label"  >仪器编号:</label>
+            <div class="col-sm-2 control-label">
+                <input class="form-control"  type="text" name="equip_id"  readonly />
+            </div>
+            <label class="col-sm-1 control-label" >分类号:</label>
+            <div class="col-sm-2 control-label">
+                <input class="form-control"  type="text" name="sort_id" readonly />
+            </div>
+            <label class="col-sm-1 control-label" >仪器名称:</label>
+            <div class="col-sm-2 control-label">
+                <input class="form-control"  type="text"  name="equip_name" readonly />
+            </div>
+            <label class="col-sm-1 control-label" >型号:</label>
+            <div class="col-sm-2 control-label">
+                <input class="form-control"  type="text" name="model" readonly />
+            </div>
+        </div>
+    </div>
+        <div class="table-bordered ">
+            <div class="form-group">
+                <label class="col-sm-1 control-label" >规格:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"   type="text" name="size" />
+                </div>
+                <label class="col-sm-1 control-label" >领用单位:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"  type="text"   name="receive_id" readonly />
+                </div>
+                <label class="col-sm-1 control-label" >单价:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"  type="text"  name="price" readonly />
+                </div>
+
+            </div>
+        </div>
+        <div class="table-bordered ">
+            <div class="form-group ">
+                <label class="col-lg-2 control-label" >使用机时:</label>
+                <label class="col-lg-1 control-label" >教学:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"   type="text" name="teaching_time" />
+                </div>
+                <label class="col-lg-1 control-label" >科研:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="research_time"/>
+                </div>
+                <label class="col-lg-1 control-label" >社会服务:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="social_service"  />
+                </div>
+                <label class="col-lg-1 control-label" >其他开放:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="other_time"/>
+                </div>
+            </div>
+        </div>
+        <div class="table-bordered ">
+            <div class="form-group">
+                <label class="col-lg-2 control-label" >培训人员数:</label>
+                <label class="col-lg-1 control-label" >学生:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"   type="text"  name="train_student"/>
+                </div>
+                <label class="col-lg-1 control-label" >教师:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="train_teacher"/>
+                </div>
+                <label class="col-lg-1 control-label" >其他人:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="train_other"/>
+                </div>
+                <label class="col-lg-1 control-label" >测样数:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="test_num"  />
+                </div>
+            </div>
+        </div>
+        <div class="table-bordered ">
+            <div class="form-group">
+                <label class="col-lg-2 control-label" >项目数:</label>
+                <label class="col-lg-1 control-label" >教学实验:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"   type="text" name="teach_item_num"/>
+                </div>
+                <label class="col-lg-1 control-label" >科研:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="research_item_num"/>
+                </div>
+                <label class="col-lg-1 control-label" >社会服务:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="social_service_num"/>
+                </div>
+
+            </div>
+        </div>
+        <div class="table-bordered ">
+            <div class="form-group">
+                <label class="col-lg-2 control-label" >获奖情况:</label>
+                <label class="col-lg-1 control-label" >国家级:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"   type="text"  name="national_award"/>
+                </div>
+                <label class="col-lg-1 control-label" >省部级:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="provincial_award" />
+                </div>
+                <label class="col-lg-1 control-label" >发明专利:</label>
+                <label class="col-lg-1 control-label" >教师:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="teacher_patent_num" />
+                </div>
+                <label class="col-lg-1 control-label" >学生</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="student_patent_num" />
+                </div>
+            </div>
+        </div>
+        <div class="table-bordered ">
+            <div class="form-group">
+                <label class="col-lg-2 control-label" >三大检索数:</label>
+                <div class="col-lg-2 control-label">
+                    <input class="form-control"   type="text" name="three_major_searches" />
+                </div>
+                <label class="col-lg-2 control-label" >核心刊物数:</label>
+                <div class="col-lg-2 control-label">
+                    <input class="form-control"  type="text" name="core_publication_num" />
+                </div>
+                <label class="col-lg-2 control-label" >仪器负责人:</label>
+                <div class="col-lg-2 control-label">
+                    <input class="form-control"  type="text" name="equip_person" />
+                </div>
+            </div>
+        </div>
+        <div class="table-bordered ">
+            <div class="form-group">
+                <label class="col-lg-2 control-label" >仪器维护人员数:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"   type="text" name="person_num" />
+                </div>
+                <label class="col-lg-2 control-label" >年维修费:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text"  name="maintenance_money"/>
+                </div>
+                <label class="col-lg-2 control-label" >仪器评价分:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="equip_score" />
+                </div>
+                <label class="col-lg-2 control-label" >年创收金额:</label>
+                <div class="col-lg-1 control-label">
+                    <input class="form-control"  type="text" name="income_noney" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-7 ">
+                <button type="submit" class="btn btn-primary js-ajax-submit" >更新</button>
+                <a class="btn btn-default" href="{:url('PreciousEquip/index')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script>
+
+    function detail(id){
+        $.ajax({
+            type: "get",
+            url: '/api/equipment/detail/'+id,
+            async: true,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("input[name=equip_id]").val(data['equip_id']);
+                $("input[name=receive_id]").val(data['receive_id']);
+                $("input[name=equip_name]").val(data['equip_name']);
+                $("input[name=sort_id]").val(data['sort_id']);
+                $("input[name=import_price]").val(data['import_price']);
+                $("input[name=price]").val(data['price']);
+                $("input[name=model]").val(data['model']);
+                $("input[name=size]").val(data['size']);
+                $("input[name=teaching_time]").val(data['teaching_time']);
+                $("input[name=research_time]").val(data['research_time']);
+                $("input[name=social_service]").val(data['social_service']);
+                $("input[name=other_time]").val(data['other_time']);
+                $("input[name=train_student]").val(data['train_student']);
+                $("input[name=train_teacher]").val(data['train_teacher']);
+                $("input[name=train_other]").val(data['train_other']);
+                $("input[name=test_num]").val(data['test_num']);
+                $("input[name=teach_item_num]").val(data['teach_item_num']);
+                $("input[name=research_item_num]").val(data['research_item_num']);
+                $("input[name=social_service_num]").val(data['social_service_num']);
+                $("input[name=national_award]").val(data['national_award']);
+                $("input[name=provincial_award]").val(data['provincial_award']);
+                $("input[name=teacher_patent_num]").val(data['teacher_patent_num']);
+                $("input[name=student_patent_num]").val(data['student_patent_num']);
+                $("input[name=three_major_searches]").val(data['three_major_searches']);
+                $("input[name=core_publication_num]").val(data['core_publication_num']);
+                $("input[name=equip_person]").val(data['equip_person']);
+                $("input[name=person_num]").val(data['person_num']);
+                $("input[name=maintenance_money]").val(data['maintenance_money']);
+                $("input[name=equip_score]").val(data['equip_score']);
+                $("input[name=income_noney]").val(data['income_noney']);
+
+            }
+        });
+    };
+    $(document).ready(function() {
+        $("#clear").click(function () {
+            $("input[name='start_time']").val('')
+            $("input[name='end_time']").val('')
+        });
+
+
+    })
+</script>
+
+</script>
+<script src="__STATIC__/js/admin.js"></script>
+<script src=" https://www.layuicdn.com/layui/layui.js"></script>
+</div>
+</body>
+</html>

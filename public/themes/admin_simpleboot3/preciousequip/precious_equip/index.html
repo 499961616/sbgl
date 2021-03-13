@@ -1,0 +1,33 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">所有设备</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" style="text-align: center" method="post" action="{:url('PreciousEquip/show')}">
+        请输入贵重仪器使用学年:
+        <input type="number" class="form-control " name="start_time" value="{$date}"
+               style="width: 100px;">——
+
+        <input type="number" class="form-control " name="end_time" value="{$date+1}"
+               style="width: 100px;" >
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+        <a class="btn btn-danger" id="clear">清空</a>
+    </form>
+
+</div>
+<script>
+    $(document).ready(function() {
+        $("#clear").click(function () {
+            $("input[name='start_time']").val('')
+            $("input[name='end_time']").val('')
+
+        });
+    })
+
+</script>
+<script src="__STATIC__/js/admin.js"></script>
+
+</body>
+</html>

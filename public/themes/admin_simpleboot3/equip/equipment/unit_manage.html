@@ -1,0 +1,183 @@
+<include file="public@header"/>
+<style>
+    .pagination{
+        margin: 5px 0px;
+    }
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">所有设备</a></li>
+
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('Equipment/unitmanage')}">
+        领用单位:
+        <input type="text" class="form-control receive_name"  name="receive_name" value="{$receive_id|default=''}" style="width: 180px;" readonly>
+        <input type="hidden" class="receive_id"  name="receive_id" value="{$receive_id|default=''}" >
+        排序：
+        <select class="form-control " name="order">
+
+            <foreach name="orders" item="vo" key="key">
+                <php> $selected = $order == $key   ? 'selected' : "" ; </php>
+                <option value="{$key}"  {$selected} > {$vo}</option>
+            </foreach>
+        </select>&nbsp;&nbsp;
+        日期:
+        <input type="text" class="form-control " name="start_time"
+               value="{$start_time|default=''}"
+               style="width: 140px;" >至
+        <input type="text" class="form-control " name="end_time"
+               value="{$end_time|default=''}"
+               style="width: 140px;" >&nbsp;&nbsp;
+
+        单价:
+        <input type="text" class="form-control " name="start_price"
+               value="{$start_price|default='0.00'}"
+               style="width: 120px;" >至
+        <input type="text" class="form-control " name="end_price"
+               value="{$end_price|default='9999999999.00'}"
+               style="width: 130px;" >&nbsp;
+
+        仪器名称:
+        <input type="text" class="form-control" name="keyword" style="width: 160px;"
+               value="{$keyword|default=''}" placeholder="请输入关键字...">
+        <input type="submit" id="sub" class="btn btn-primary" value="查询" disabled/>
+        <a class="btn btn-danger" id="clear">清空</a>
+    </form>
+
+
+    </form>
+    <form class="js-ajax-form" action="" method="post">
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                </th>
+                <th>领用单位号</th>
+                <th>领用单位名</th>
+                <th>仪器编号</th>
+                <th>分类号</th>
+                <th>仪器名称</th>
+                <th>型号</th>
+                <th>领用人</th>
+                <th>经手人</th>
+                <th>价格</th>
+                <th>入库时间</th>
+
+            </tr>
+            </thead>
+
+            <foreach name="data" item="vo" >
+                <tr>
+                    <td>
+                        {$vo['receive_id']}
+                    </td>
+                    <td>
+                        {$vo['receive_name']}
+                    </td>
+                    <td>
+                        {$vo['equip_id']}
+                    </td>
+                    <td>
+                        {$vo['sort_id']}
+                    </td>
+                    <td>
+                        {$vo['equip_name']}
+                    </td>
+
+                    <td>
+                        {$vo['model']}
+                    </td>
+
+                    <td>
+                        {$vo['employer']}
+                    </td>
+                    <td>
+                        {$vo['dealer']}
+                    </td>
+                    <td>
+                        {$vo['price']}
+                    </td>
+                    <td>
+                        {$vo['torage_time']}
+                    </td>
+
+                </tr>
+            </foreach>
+
+
+        </table>
+        <notempty name="equipPrice">
+            <div style="margin-top: 15px; margin-bottom: 5px;font-size: larger" >
+                共：{$equipPrice[0]['num']} 件设备；总共价值:  {$equipPrice[0]['price']} 元；
+
+            </div>
+
+        </notempty>
+
+        <ul class="pagination">{$page|default=''}</ul>
+    </form>
+
+    <form method="post"  action="{:url('Equipment/export')}" >
+        <input type="hidden" name="receive_id" value="{$receive_id}" >
+        <input type="hidden" name="order" value="{$order}" >
+        <input type="hidden" name="start_time" value="{$start_time}">
+        <input type="hidden" name="end_time" value="{$end_time}">
+        <input type="hidden" name="start_price" value="{$start_price}">
+        <input type="hidden" name="end_price" value="{$end_price}">
+        <input type="hidden" name="keyword" value="{$keyword}">
+        <button class="btn btn-info js-ajax-submit" type="submit">筛选数据导出Excel</button>
+
+    </form>
+
+</div>
+<script>
+    $(document).ready(function() {
+        $("#clear").click(function () {
+            $(".dwName").val("").trigger("change");
+            $("input[name='start_time']").val('')
+            $("input[name='end_time']").val('')
+            $("input[name='keyword']").val('')
+        });
+    })
+
+</script>
+<script src="__STATIC__/js/admin.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        function changeBtnable() {
+            $("#sub").removeAttr("disabled");
+
+        }
+
+        function changeBtndisable() {
+            $("#sub").prop("disabled", "disabled");
+        }
+
+
+
+        $("input").bind("input propertychange change", function (event) {
+
+            let receive_name = $("input[name=receive_name]").val();
+            let start_time = $("input[name=start_time]").val();
+            let keyword = $("input[name=keyword]").val();
+
+            if (receive_name == '' && start_time == '' && keyword == '') {
+                changeBtndisable();
+                // console.log(66)
+            } else {
+                changeBtnable()
+                // console.log(77)
+
+            }
+
+        })
+    })
+
+</script>
+
+</body>
+</html>
