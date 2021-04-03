@@ -19,6 +19,15 @@ Route::post('equipment/dwDel', 'equipment/DanWei/dwDel');
 //返回单位
 Route::get('equipment/dwInfo', 'equipment/DanWei/dwInfo');
 
+//返回上报单位
+Route::post('equipment/reportDw', 'equipment/DanWei/reportDw');
+
+//返回上一次的上报单位
+Route::post('equipment/oldReportDw', 'equipment/DanWei/oldReportDw');
+
+//保存上传单位id
+Route::post('equipment/saveReport', 'equipment/DanWei/saveReport');
+
 //根据单位id 返回单位全部信息
 Route::get('equipment/equipId/:id', 'equipment/DanWei/dwInfos');
 
@@ -43,3 +52,6 @@ Route::get('equipment/equipName', 'equipment/Sbmk/search');
 //返回所选的精密设备详细信息
 Route::get('equipment/detail/:id', 'equipment/PreciousEquip/search');
 
+
+//导出上报文本基表1的
+Route::post('equipment/ReportTxt/typeOne', 'equipment/ReportTxt/typeOne');

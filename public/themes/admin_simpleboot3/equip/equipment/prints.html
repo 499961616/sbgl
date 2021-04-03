@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <!-- Bootstrap -->
+    <include file="public@header"/>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<style>
+    .a4-endwise{
+        width: 1075px;
+        height: 1334px;
+        overflow: hidden;
+        padding: 0;
+        word-break:break-all;
+    }
+    .a4-broadwise{
+        width: 1569px;
+        height: 1073px;
+        border: 2px #000 solid;
+        overflow: hidden;
+        padding: 0;
+        word-break:break-all;
+    }
+    .print{
+        position: fixed;
+        top: 2%;
+        right: 10%;
+    }
+    .first{
+        margin-top: 30px;
+    }
+    .second{
+        margin-top: 70px;
+
+    }
+    .third{
+        margin-top: 70px;
+    }
+
+    td{
+
+        font-family: 宋体;
+        padding: 8px 4px;
+        font-size: 16px;
+        font-weight: bolder;
+        text-align:justify;
+        text-justify:distribute-all-lines;
+    }
+    .tds{
+        text-align-last:justify
+    }
+    .title{
+     margin: 0 0 10px;
+        line-height: 20px;
+    }
+    .table-footer{
+    font-size: 15px;
+    font-weight: bold;
+    display: inline-block;
+    width: 90%;
+    margin-top: 10px;
+
+    }
+    .table-header{
+    font-size: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+    .table-right{
+    writing-mode: tb-rl;
+    font-weight: bolder;
+    padding: 5px 8px ;
+    font-size: 15px;
+    letter-spacing:0.3em;
+    line-height:13pt;
+    float: left;
+    }
+</style>
+<body>
+<a class="print btn  btn-info"  href="javascript:;" onclick="preview();">打印</a>
+<a class=" btn btn-default js-ajax-form" style="position: fixed; top: 2%;
+        right: 15%;" href="{:url('Equipment/edit',array('equip_id'=>$data['old_equip_id']))}">返回</a>
+
+<!--startprint-->
+<div class="container a4-endwise" id="test">
+    <div class="first">
+        <div class="table-header">
+            <p class="margin-bottom: 20px;" style="font-size: 25px;padding: 8px;text-align: center">阳光学院仪器设备验收、领用单</p>
+
+            <span style="margin-left: 1%">单据号:</span>&nbsp;{$data['document_num']}
+            <span style="margin-left: 25%">制表日期:</span>&nbsp; {$data['create_time']}
+            <span style="margin-left: 10%">资产分类:</span>&nbsp; {$data['sort']}
+
+        </div>
+
+        <table border="2"width="90%" style="margin: 0 auto;float: left" cellspacing="0" >
+
+            <tr align="center">
+                <td   class="tds" width="13%">领用单位</td>
+                <td colspan="2"  width="45%">&nbsp;&nbsp;{$data['useunit_name']}</td>
+                <td class="tds"  width="13%">仪器编号</td>
+                <td  colspan="2"style="text-align: center" width="24%">&nbsp;&nbsp; {$data['equip_id']} </td>
+            </tr>
+
+            <tr align="center">
+                <td class="tds">仪器名称</td>
+                <td>&nbsp;&nbsp;{$data['equip_name']}</td>
+                <td class="tds" width="10%">数量</td>
+                <td style="text-align: center"> &nbsp;&nbsp;{$data['num']} </td>
+                <td class="tds" width="10%">分类编号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['sort_id']} </td>
+            </tr>
+
+            <tr align="center">
+                <td class="tds">型号</td>
+                <td >&nbsp;&nbsp;{$data['size']} </td>
+                <td class="tds" width="10%">单价</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['price']} </td>
+
+                <td class="tds" width="10%">购置日期</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['purchase_date']} </td>
+
+            </tr>
+
+            <tr align="center">
+                <td class="tds">规格</td>
+                <td >&nbsp;&nbsp;{$data['size']} </td>
+                <td class="tds" width="10%">金额</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['total_size']} </td>
+                <td class="tds" width="10%">经费来源</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['instrument_source']} </td>
+            </tr>
+            <tr align="center">
+                <td class="tds">厂家</td>
+                <td >&nbsp;&nbsp;{$data['factory']} </td>
+                <td class="tds" width="10%">设备号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['instrument_source']} </td>
+
+                <td class="tds" width="10%">国别</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['country']} </td>
+
+            </tr>
+
+            <tr >
+                <td class="tds">出厂号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['factory_num']} </td>
+
+                <td class="tds" colspan="1">科研号</td>
+                <td colspan="3"></td>
+            </tr>
+
+        </table>
+        <div class="table-right">资产主管部门&nbsp; 留存单</div>
+        <div class="table-footer">
+            <span style="margin-left: 2%">主管:</span>
+            <span></span>
+            <span style="margin-left: 35%">领用人:</span>
+            <span>{$data['employer']}</span>
+            <span style="margin-left: 25%">验收人:</span>
+            <span></span>
+        </div>
+    </div>
+    <div class="second">
+        <div class="table-header">
+            <p class="title" style="font-size: 25px;padding: 8px;text-align: center">阳光学院仪器设备验收、领用单</p>
+
+            <span style="margin-left: 1%">单据号:</span>&nbsp;{$data['document_num']}
+            <span style="margin-left: 25%">制表日期:</span>&nbsp;{$data['create_time']}
+            <span style="margin-left: 10%">资产分类:</span>&nbsp;{$data['sort']}
+
+        </div>
+
+        <table border="2"width="90%" style="margin: 0 auto;float: left" cellspacing="0"  >
+
+            <tr align="center">
+                <td   class="tds" width="13%">领用单位</td>
+                <td colspan="2"  width="45%">&nbsp;&nbsp;{$data['useunit_name']}</td>
+                <td class="tds"  width="13%">仪器编号</td>
+                <td  colspan="2"style="text-align: center" width="24%">&nbsp;&nbsp;{$data['equip_id']}</td>
+            </tr>
+
+            <tr align="center">
+                <td class="tds">仪器名称</td>
+                <td>&nbsp;&nbsp;{$data['equip_name']}</td>
+                <td class="tds" width="10%">数量</td>
+                <td style="text-align: center"> &nbsp;&nbsp;{$data['num']} </td>
+                <td class="tds" width="10%">分类编号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['sort_id']} </td>
+            </tr>
+
+            <tr align="center">
+                <td class="tds">型号</td>
+                <td >&nbsp;&nbsp;{$data['size']} </td>
+                <td class="tds" width="10%">单价</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['price']} </td>
+
+                <td class="tds" width="10%">购置日期</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['purchase_date']} </td>
+
+            </tr>
+
+            <tr align="center">
+                <td class="tds">规格</td>
+                <td >&nbsp;&nbsp;{$data['size']} </td>
+                <td class="tds" width="10%">金额</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['total_size']} </td>
+                <td class="tds" width="10%">经费来源</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['instrument_source']} </td>
+            </tr>
+            <tr align="center">
+                <td class="tds">厂家</td>
+                <td >&nbsp;&nbsp;{$data['factory']} </td>
+                <td class="tds" width="10%">设备号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['instrument_source']} </td>
+
+                <td class="tds" width="10%">国别</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['country']} </td>
+
+            </tr>
+
+            <tr >
+                <td class="tds">出厂号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['factory_num']} </td>
+
+                <td class="tds" colspan="1">科研号</td>
+                <td colspan="3"></td>
+            </tr>
+
+        </table>
+        <p class="table-right">财务处 &nbsp; 留存单</p>
+
+        <div class="table-footer">
+            <span style="margin-left: 2%">主管:</span>
+            <span></span>
+            <span style="margin-left: 35%">领用人:</span>
+            <span></span>
+
+            <span style="margin-left: 25%">验收人:</span>
+            <span></span>
+        </div>
+    </div>
+    <div class="third">
+        <div class="table-header">
+            <p class="title" style="font-size: 25px;padding: 8px;text-align: center">阳光学院仪器设备验收、领用单</p>
+            <span style="margin-left: 1%">单据号:</span>&nbsp;{$data['document_num']}
+            <span style="margin-left: 25%">制表日期:</span>&nbsp;{$data['create_time']}
+            <span style="margin-left: 10%">资产分类:</span>&nbsp;{$data['sort']}
+            <input type="hidden" name="old_equip_id" value="$data['old_equip_id']">
+        </div>
+
+        <table border="2"width="90%" style="margin: 0 auto;float: left" cellspacing="0" >
+
+            <tr align="center">
+                <td   class="tds" width="13%">领用单位</td>
+                <td colspan="2"  width="45%">&nbsp;&nbsp;{$data['useunit_name']}</td>
+                <td class="tds"  width="13%">仪器编号</td>
+                <td  colspan="2"style="text-align: center" width="24%">&nbsp;&nbsp;{$data['equip_id']}</td>
+            </tr>
+
+            <tr align="center">
+                <td class="tds">仪器名称</td>
+                <td>&nbsp;&nbsp;{$data['equip_name']}</td>
+                <td class="tds" width="10%">数量</td>
+                <td style="text-align: center"> &nbsp;&nbsp;{$data['num']} </td>
+                <td class="tds" width="10%">分类编号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['sort_id']} </td>
+            </tr>
+
+            <tr align="center">
+                <td class="tds">型号</td>
+                <td >&nbsp;&nbsp;{$data['size']} </td>
+                <td class="tds" width="10%">单价</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['price']} </td>
+
+                <td class="tds" width="10%">购置日期</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['purchase_date']} </td>
+
+            </tr>
+
+            <tr align="center">
+                <td class="tds">规格</td>
+                <td >&nbsp;&nbsp;{$data['size']} </td>
+                <td class="tds" width="10%">金额</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['total_size']} </td>
+                <td class="tds" width="10%">经费来源</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['instrument_source']} </td>
+            </tr>
+            <tr align="center">
+                <td class="tds">厂家</td>
+                <td >&nbsp;&nbsp;{$data['factory']} </td>
+                <td class="tds" width="10%">设备号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['instrument_source']} </td>
+
+                <td class="tds" width="10%">国别</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['country']} </td>
+
+            </tr>
+
+            <tr >
+                <td class="tds">出厂号</td>
+                <td style="text-align: center">&nbsp;&nbsp;{$data['factory_num']} </td>
+
+                <td class="tds" colspan="1">科研号</td>
+                <td colspan="3"></td>
+            </tr>
+
+        </table>
+        <p class="table-right">领用单位 &nbsp; 留存单</p>
+
+        <div class="table-footer">
+            <span style="margin-left: 2%">主管:</span>
+            <span></span>
+            <span style="margin-left: 35%">领用人:</span>
+            <span></span>
+
+            <span style="margin-left: 25%">验收人:</span>
+            <span></span>
+        </div>
+    </div>
+</div>
+
+<!--endprint-->
+
+<script>
+    /**
+     * [打印]
+     * @return {[type]} [description]
+     */
+    function preview()
+    {
+        bdhtml=window.document.body.innerHTML;//获取当前页的html代码
+        sprnstr="<!--startprint-->";//设置打印开始区域
+        eprnstr="<!--endprint-->";//设置打印结束区域
+        prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18); //从开始代码向后取html
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));//从结束代码向前取html
+        window.document.body.innerHTML=prnhtml;
+        window.print();
+        window.document.body.innerHTML=bdhtml;
+    }
+</script>
+
+</body>
+</html>

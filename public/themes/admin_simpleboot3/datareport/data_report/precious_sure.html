@@ -25,15 +25,15 @@
 
     <table class="table table-bordered  table-hover " style="width:355px; height: 400px;overflow-y: scroll;  position:absolute;" >
         <thead>
-            <tr>
-                <th width="100">仪器编号</th>
-                <th width="260">领用单位</th>
-                <th width="240">仪器名称</th>
-            </tr>
+        <tr>
+            <th width="100">仪器编号</th>
+            <th width="260">领用单位</th>
+            <th width="240">仪器名称</th>
+        </tr>
         </thead>
         <tbody>
         <foreach name="datas" item="vo" key ='k' >
-                <tr style="cursor: pointer" onclick="detail('{$vo[\'equip_id\']}')" >
+            <tr style="cursor: pointer" onclick="detail('{$vo[\'equip_id\']}')" >
                 <td>
                     {$vo['equip_id']}
                 </td>
@@ -44,33 +44,33 @@
                     {$vo['equip_name']}
                 </td>
             </tr>
-           </foreach>
+        </foreach>
         </tbody>
     </table>
     <ul class="pagination">{$pages|default=''}</ul>
-    <form action="{:url('PreciousEquip/update')}" method="post" class="form-horizontal js-ajax-form  " style=" width:1180px;float: right; margin-right: 20px">
+    <form action="{:url('preciousequip/PreciousEquip/update')}" method="post" class="form-horizontal js-ajax-form  " style=" width:1180px;float: right; margin-right: 20px">
 
         <input type="hidden" name="years" value="{$years}">
         <div class="table-bordered ">
-        <div class="form-group ">
-            <label class="col-sm-1 control-label"  >仪器编号:</label>
-            <div class="col-sm-2 control-label">
-                <input class="form-control"  type="text" name="equip_id"  readonly />
-            </div>
-            <label class="col-sm-1 control-label" >分类号:</label>
-            <div class="col-sm-2 control-label">
-                <input class="form-control"  type="text" name="sort_id" readonly />
-            </div>
-            <label class="col-sm-1 control-label" >仪器名称:</label>
-            <div class="col-sm-2 control-label">
-                <input class="form-control"  type="text"  name="equip_name" readonly />
-            </div>
-            <label class="col-sm-1 control-label" >型号:</label>
-            <div class="col-sm-2 control-label">
-                <input class="form-control"  type="text" name="model" readonly />
+            <div class="form-group ">
+                <label class="col-sm-1 control-label"  >仪器编号:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"  type="text" name="equip_id"  readonly />
+                </div>
+                <label class="col-sm-1 control-label" >分类号:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"  type="text" name="sort_id" readonly />
+                </div>
+                <label class="col-sm-1 control-label" >仪器名称:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"  type="text"  name="equip_name" readonly />
+                </div>
+                <label class="col-sm-1 control-label" >型号:</label>
+                <div class="col-sm-2 control-label">
+                    <input class="form-control"  type="text" name="model" readonly />
+                </div>
             </div>
         </div>
-    </div>
         <div class="table-bordered ">
             <div class="form-group">
                 <label class="col-sm-1 control-label" >规格:</label>

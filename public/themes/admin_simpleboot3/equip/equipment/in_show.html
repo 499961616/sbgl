@@ -11,12 +11,10 @@
 <body>
 <div class="wrap js-check-wrap">
     <ul class="nav nav-tabs">
-        <li><a href="{:url('Equipment/index')}">所有设备</a></li>
-        <li ><a href="{:url('Equipment/add')}">添加设备</a></li>
-        <li class="active"><a href="#">修改设备</a></li>
+        <li class="active"><a href="#">查看转入设备信息</a></li>
     </ul>
 
-    <form action="{:url('Equipment/save')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+    <form action="{:url('/equiptransfer/EquipTransfer/transferAcc',array('equip_id'=>$data['equip_id'],'id'=>$data['tran_id'] ))}" method="post" class="form-horizontal js-ajax-form margin-top-20">
 
         <div class="row" style="width: 1300px">
             <table class="table table-bordered">
@@ -28,12 +26,12 @@
                         </td>
                         <th width="130">入账时间<span class="form-required">*</span></th>
                         <td>
-                            <input class="form-control js-bootstrap-datetime" type="text" style="width: 250px" name="torage_time"
+                            <input class="form-control js-bootstrap-datetime" type="text" style="width: 250px" name="torage_time" readonly
                                    value="{$data['torage_time']|default=''}">
                         </td>
                         <th width="130">记账人<span class="form-required">*</span></th>
                         <td>
-                            <input class="form-control" type="text" name="bookkeeper"  value="{$data['bookkeeper']|default=''}"  >
+                            <input class="form-control" type="text" name="bookkeeper"  value="{$data['bookkeeper']|default=''}"  readonly>
                         </td>
                     </tr>
                     <tr>
@@ -44,14 +42,15 @@
 
                         <th width="130">分类号<span class="form-required">*</span></th>
                         <td>
-                            <select class="equipNum form-control" style="width: 250px;"  name="sort_id" >
+                            <select class="equipNum form-control" style="width: 250px;"  name="sort_id" readonly >
 
                                 <option value="{$data['sort_id']|default=''}" >{$data['sort_id']|default=''}</option>
+
                             </select>
                         </td>
                         <th width="130">仪器名称<span class="form-required">*</span></th>
                         <td>
-                            <input type="text" required class="equipName form-control"  value="{$data['equip_name']|default=''}" name="equip_name">
+                            <input type="text" required class="equipName form-control"  value="{$data['equip_name']|default=''}" name="equip_name" readonly>
                         </td>
                     </tr>
                     <tr>
@@ -59,37 +58,37 @@
                         <td>
                             <input type="text" class="form-control receive_name" id="receive_name" style="display: inline-block;width: 250px;" value="{$data['receive_name']|default=''}" required  readonly>
                             <input type="hidden" class="receive_id" id="receive_id"  name="receive_id" value="{$data['receive_id']|default=''}" >
-                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAdd" type="submit" >单位选择</a>
+                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAdd" type="submit" disabled="disabled">单位选择</a>
 
 
                         </td>
                         <th width="130">型号<span class="form-required">*</span></th>
                         <td>
-                            <input type="text"  class="form-control"  name="model" value="{$data['model']|default=''}" >
+                            <input type="text"  class="form-control"  name="model" value="{$data['model']|default=''}" readonly>
                         </td>
                         <th width="130">规格<span class="form-required">*</span></th>
                         <td>
-                            <input type="text" class="form-control" name="size"  value="{$data['size']|default=''}">
+                            <input type="text" class="form-control" name="size"  value="{$data['size']|default=''}" readonly>
                         </td>
                     </tr>
                     <tr>
                         <th width="130">单价<span class="form-required">*</span></th>
                         <td>
-                            <input type="number" class="form-control" name="price"   value="{$data['price']|default=''}">
+                            <input type="number" class="form-control" name="price"   value="{$data['price']|default=''}" readonly>
                         </td>
                         <th width="130">厂家<span class="form-required">*</span></th>
                         <td>
-                            <input type="text" class="form-control" name="factory"  value="{$data['factory']|default=''}" >
+                            <input type="text" class="form-control" name="factory"  value="{$data['factory']|default=''}" readonly>
                         </td>
                         <th width="130">现状<span class="form-required">*</span></th>
                         <td>
 
-                                <select class="form-control form-control-lg" name="status">
-                                    <foreach name="status" item="vo" key="key">
+                            <select class="form-control form-control-lg" name="status" disabled="disabled">
+                                <foreach name="status" item="vo" key="key">
                                     <php>$selected =substr($data['status'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
-                                        <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
-                                    </foreach>
-                                </select>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -97,35 +96,36 @@
                         <td>
                             <input type="text" class="form-control useunit_name"  name="useunit_name" style="display: inline-block;width: 250px;"value="{$data['useunit_name']|default=''}" readonly>
                             <input type="hidden" class="useunit_num"  name="useunit_num" value="{$data['useunit_num']|default=''}" >
-                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAddUse" type="submit" >单位选择</a>
+                            <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModalAddUse" type="submit" disabled="disabled">单位选择</a>
 
                         </td>
                         </td>
                         <th width="130">购置日期<span class="form-required">*</span></th>
                         <td>
-                            <input class="form-control js-bootstrap-datetime" type="text"  name="purchase_date"
+                            <input class="form-control js-bootstrap-datetime" type="text"  name="purchase_date"readonly
                                    value="{$data['purchase_date']|default=''}">
                         </td>
                         <th width="130">供货商<span class="form-required">*</span></th>
                         <td>
-                            <input type="text" class="form-control"  name="supplier"  value="{$data['supplier']|default=''}" >
+                            <input type="text" class="form-control"  name="supplier"  value="{$data['supplier']|default=''}" readonly>
                         </td>
                     </tr>
                     <tr>
                         <th width="130">经费科目<span class="form-required">*</span></th>
                         <td>
 
-                            <select class="form-control form-control-lg" name="funding_subjects">
+                            <select class="form-control form-control-lg" name="funding_subjects" disabled="disabled">
                                 <foreach name="funding_subjects" item="vo" key="key">
                                     <php>$selected =substr($data['funding_subjects'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
                                     <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
                                 </foreach>
                             </select>
 
+
                         </td>
                         <th width="130">使用方向<span class="form-required">*</span></th>
                         <td>
-                            <select class="form-control form-control-lg" name="use_direction">
+                            <select class="form-control form-control-lg" name="use_direction" disabled="disabled">
                                 <foreach name="use_direction" item="vo" key="key">
                                     <php>$selected =substr($data['use_direction'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
                                     <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
@@ -135,10 +135,10 @@
                         <th width="130">仪器来源<span class="form-required">*</span></th>
                         <td>
 
-                            <select class="form-control form-control-lg" name="instrument_source">
+                            <select class="form-control form-control-lg" name="instrument_source" disabled="disabled">
 
                                 <foreach name="instrument_source" item="vo" key="key">
-                                   <php> $selected = $data['instrument_source'] == $key+1   ? 'selected' : "" ; </php>
+                                    <php> $selected = $data['instrument_source'] == $key+1   ? 'selected' : "" ; </php>
                                     <option value="{$key+1}"  {$selected} > {$vo}</option>
                                 </foreach>
 
@@ -149,7 +149,7 @@
                     <tr>
                         <th width="130">单据号</th>
                         <td>
-                            <input type="text" class="form-control"  value="{$data['document_num']|default=''}" name="document_num">
+                            <input type="text" class="form-control"  value="{$data['document_num']|default=''}" name="document_num" readonly>
                         </td>
 
                         <th width="130">领用人</th>
@@ -170,50 +170,44 @@
                     <tr>
                         <th width="130">出厂号</th>
                         <td>
-                            <input type="text" class="form-control" name="factory_num" value="{$data['factory_num']|default=''}">
+                            <input type="text" class="form-control" name="factory_num" value="{$data['factory_num']|default=''}" readonly>
                         </td>
 
                         <th width="130">国别码<span class="form-required">*</span></th>
                         <td>
-                            <input type="text" class="form-control"  name="country" value="{$data['country']|default=''}">
+                            <input type="text" class="form-control"  name="country" value="{$data['country']|default=''}" readonly>
                         </td>
 
                         <th width="130">备注<span class="form-required">*</span></th>
                         <td>
-                            <textarea style="width: 250px" name="remark">{$data['remark']|default=''}</textarea>
+                            <textarea style="width: 250px" name="remark" readonly>{$data['remark']|default=''}</textarea>
                         </td>
                     </tr>
                     <tr>
                         <th width="130">存放点</th>
                         <td>
-                            <input type="text" class="form-control" name="storage_location" value="{$data['storage_location']|default=''}">
+                            <input type="text" class="form-control" name="storage_location" value="{$data['storage_location']|default=''}" readonly>
                         </td>
                         <th width="130">说明</th>
                         <td>
-                            <input type="text" class="form-control" name="description" value="{$data['description']|default=''}">
+                            <input type="text" class="form-control" name="description" value="{$data['description']|default=''}" readonly>
                         </td>
 
                     </tr>
                 </div>
+
             </table>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-7 ">
-
-                <button type="submit" class="btn btn-primary js-ajax-submit" >更新</button>
-                <a class="btn btn-default" href="{:url('Equipment/index')}">{:lang('BACK')}</a>
-
+                <button type="submit" class="btn btn-primary js-ajax-submit" onClick="return confirm('确定要接收调拨设备?')">确定接收</button>
+                <a class="btn btn-default" href="{:url('equiptransfer/EquipTransfer/transferin')}">{:lang('BACK')}</a>
             </div>
         </div>
     </form>
 
 
-    <form method="post"  action="{:url('Equipment/prints')}" >
-        <input type="hidden" name="equip_id" value="{$data['equip_id']|default=''}" >
 
-        <button class="btn btn-info js-ajax-submit" style="margin-top: -80px" type="submit">数据打印</button>
-
-    </form>
 </div>
 <script type="text/javascript" src="__STATIC__/js/admin.js"></script>
 <script>

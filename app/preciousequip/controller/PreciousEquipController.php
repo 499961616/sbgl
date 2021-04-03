@@ -27,13 +27,9 @@ class PreciousEquipController extends AdminBaseController
     {
         $param = $this->request->param();
 
-        $startTime = empty($param['start_time']) ? 0 : $param['start_time'];
-        $endTime   = empty($param['end_time'])   ? 0 : $param['end_time'];
-        //时间格式替换  Y-M-D  替换为 Y.M.D
-        if (!empty($param['start_time'])){
-            $param['start_time'] = str_replace('-','.',$param['start_time']);
-            $param['start_time'] = str_replace('-','.',$param['start_time']);
-        }
+        $startTime = empty($param['start_time']) ? date("Y") : $param['start_time'];
+        $endTime   = empty($param['end_time'])   ? date("Y")+1  : $param['end_time'];
+
          $years = $startTime."/".$endTime;
 
         $PreciousEquipModel = new PreciousEquipModel();

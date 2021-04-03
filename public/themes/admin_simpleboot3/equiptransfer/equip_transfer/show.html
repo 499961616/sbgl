@@ -16,7 +16,7 @@
         <li class="active"><a href="#">修改设备</a></li>
     </ul>
 
-    <form action="{:url('Equipment/save')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+    <form action="{:url('equip/Equipment/save')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
 
         <div class="row" style="width: 1300px">
             <table class="table table-bordered">
@@ -84,12 +84,12 @@
                         <th width="130">现状<span class="form-required">*</span></th>
                         <td>
 
-                                <select class="form-control form-control-lg" name="status">
-                                    <foreach name="status" item="vo" key="key">
+                            <select class="form-control form-control-lg" name="status">
+                                <foreach name="status" item="vo" key="key">
                                     <php>$selected =substr($data['status'],0,1)== substr($vo,0,1)? 'selected' :''; </php>
-                                        <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
-                                    </foreach>
-                                </select>
+                                    <option value="{$vo|substr=0,1}" {$selected} > {$vo}</option>
+                                </foreach>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -138,7 +138,7 @@
                             <select class="form-control form-control-lg" name="instrument_source">
 
                                 <foreach name="instrument_source" item="vo" key="key">
-                                   <php> $selected = $data['instrument_source'] == $key+1   ? 'selected' : "" ; </php>
+                                    <php> $selected = $data['instrument_source'] == $key+1   ? 'selected' : "" ; </php>
                                     <option value="{$key+1}"  {$selected} > {$vo}</option>
                                 </foreach>
 
@@ -201,14 +201,14 @@
             <div class="col-sm-offset-2 col-sm-7 ">
 
                 <button type="submit" class="btn btn-primary js-ajax-submit" >更新</button>
-                <a class="btn btn-default" href="{:url('Equipment/index')}">{:lang('BACK')}</a>
+                <a class="btn btn-default" href="{:url('EquipTransfer/transferIn')}">{:lang('BACK')}</a>
 
             </div>
         </div>
     </form>
 
 
-    <form method="post"  action="{:url('Equipment/prints')}" >
+    <form method="post"  action="{:url('equip/Equipment/prints')}" >
         <input type="hidden" name="equip_id" value="{$data['equip_id']|default=''}" >
 
         <button class="btn btn-info js-ajax-submit" style="margin-top: -80px" type="submit">数据打印</button>

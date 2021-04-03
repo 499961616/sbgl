@@ -1,29 +1,30 @@
 <include file="public@header"/>
+<include file="public@modelJs"/>
+
 <style>
     .pagination{
         margin: 5px 0px;
     }
+    .node_name{
+        font-size: 15px;
+    }
 </style>
 </head>
-<!--此页面是给二级单位查看的 和导出设备的页面-->
 <body>
 <div class="wrap js-check-wrap">
     <ul class="nav nav-tabs">
         <li class="active"><a href="javascript:;">所有设备</a></li>
 
     </ul>
-    <form class="well form-inline margin-top-20" method="post" action="{:url('Equipment/unitmanage')}">
-        领用单位:
-        <input type="text" class="form-control receive_name"  name="receive_name" value="{$receive_id|default=''}" style="width: 180px;" readonly>
-        <input type="hidden" class="receive_id"  name="receive_id" value="{$receive_id|default=''}" >
-        排序：
-        <select class="form-control " name="order">
+    <form class="well form-inline margin-top-20" method="post" action="{:url('AssetPrint/index')}">
+        <!--批量变动 公共筛选头部-->
 
-            <foreach name="orders" item="vo" key="key">
-                <php> $selected = $order == $key   ? 'selected' : "" ; </php>
-                <option value="{$key}"  {$selected} > {$vo}</option>
-            </foreach>
-        </select>&nbsp;&nbsp;
+        领用单位:
+        <input type="text" class="form-control receive_name"  name="receive_name" value="{$receive_name|default=''}" style="width: 180px;" readonly>
+        <input type="hidden" class="receive_id"  name="receive_id" value="{$receive_id|default=''}" >
+
+        <a class="js-ajax-submit btn btn-primary"  data-toggle="modal" data-target="#myModal" type="submit" >单位选择</a>
+
         日期:
         <input type="text" class="form-control " name="start_time"
                value="{$start_time|default=''}"
@@ -32,22 +33,21 @@
                value="{$end_time|default=''}"
                style="width: 140px;" >&nbsp;&nbsp;
 
-        单价:
-        <input type="text" class="form-control " name="start_price"
-               value="{$start_price|default='0.00'}"
+        仪器编号:
+        <input type="text" class="form-control " name="start_equip_id"
+               value="{$start_equip_id|default=''}"
                style="width: 120px;" >至
-        <input type="text" class="form-control " name="end_price"
-               value="{$end_price|default='9999999999.00'}"
+        <input type="text" class="form-control " name="end_equip_id"
+               value="{$end_equip_id|default=''}"
                style="width: 130px;" >&nbsp;
 
-        仪器名称:
-        <input type="text" class="form-control" name="keyword" style="width: 160px;"
-               value="{$keyword|default=''}" placeholder="请输入关键字...">
-        <input type="submit" id="sub" class="btn btn-primary" value="查询" disabled/>
+
+        <input type="submit" id="sub" class="btn btn-primary" value="查询" />
         <a class="btn btn-danger" id="clear">清空</a>
     </form>
 
 
+    <include file="public@model"/>
     </form>
     <form class="js-ajax-form" action="" method="post">
         <table class="table table-hover table-bordered table-list">
@@ -64,7 +64,7 @@
                 <th>经手人</th>
                 <th>价格</th>
                 <th>入库时间</th>
-
+                <th>操作</th>
             </tr>
             </thead>
 
@@ -102,10 +102,10 @@
                     <td>
                         {$vo['torage_time']}
                     </td>
-                    <td>
-                        <a class=" btn btn-xs btn-primary"  href="{:url('Equipment/unit_edit',array('equip_id'=>$vo['equip_id']))}">{:lang('EDIT')}</a>&nbsp;&nbsp;
-                    </td>
 
+                    <td>
+                        <a class=" btn btn-xs btn-primary"  href="{:url('equip/Equipment/edit',array('equip_id'=>$vo['equip_id']))}">{:lang('EDIT')}</a>
+                    </td>
                 </tr>
             </foreach>
 
@@ -122,18 +122,15 @@
         <ul class="pagination">{$page|default=''}</ul>
     </form>
 
-    <form method="post"  action="{:url('Equipment/export')}" >
+    <form method="post"  action="{:url('AssetPrint/prints')}" >
+        <input type="hidden" name="receive_name" value="{$receive_name}" >
         <input type="hidden" name="receive_id" value="{$receive_id}" >
-        <input type="hidden" name="order" value="{$order}" >
         <input type="hidden" name="start_time" value="{$start_time}">
         <input type="hidden" name="end_time" value="{$end_time}">
-        <input type="hidden" name="start_price" value="{$start_price}">
-        <input type="hidden" name="end_price" value="{$end_price}">
-        <input type="hidden" name="keyword" value="{$keyword}">
-        <button class="btn btn-info js-ajax-submit" type="submit">筛选数据导出Excel</button>
-
+        <input type="hidden" name="start_equip_id" value="{$start_equip_id}">
+        <input type="hidden" name="end_equip_id" value="{$end_equip_id}">
+        <button class="btn btn-info js-ajax-submit" type="submit">资产打印</button>
     </form>
-
 </div>
 <script>
     $(document).ready(function() {
@@ -141,47 +138,12 @@
             $(".dwName").val("").trigger("change");
             $("input[name='start_time']").val('')
             $("input[name='end_time']").val('')
-            $("input[name='keyword']").val('')
+            $("input[name='start_equip_id']").val('')
+            $("input[name='end_equip_id']").val('')
         });
     })
 
 </script>
 <script src="__STATIC__/js/admin.js"></script>
-
-<script>
-
-    $(document).ready(function () {
-
-        function changeBtnable() {
-            $("#sub").removeAttr("disabled");
-
-        }
-
-        function changeBtndisable() {
-            $("#sub").prop("disabled", "disabled");
-        }
-
-
-
-        $("input").bind("input propertychange change", function (event) {
-
-            let receive_name = $("input[name=receive_name]").val();
-            let start_time = $("input[name=start_time]").val();
-            let keyword = $("input[name=keyword]").val();
-
-            if (receive_name == '' && start_time == '' && keyword == '') {
-                changeBtndisable();
-                // console.log(66)
-            } else {
-                changeBtnable()
-                // console.log(77)
-
-            }
-
-        })
-    })
-
-</script>
-
 </body>
 </html>

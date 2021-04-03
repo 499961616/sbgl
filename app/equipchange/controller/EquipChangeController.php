@@ -13,8 +13,8 @@ class EquipChangeController extends AdminBaseController
 //数据变动  单条变动首页
     public function index()
     {
-        $dwModel = new DwModel();
-        $equipModel = new EquipmentModel();
+        $equipModel  =   $this->roles();
+
         $equipChangeService = new EquipChangeService();
         //页码id
         $id = $this->request->param('id');
@@ -38,10 +38,13 @@ class EquipChangeController extends AdminBaseController
         }elseif (is_null($id) && !is_null($equip_id)){
 
             $data= $equipModel->where('equip_id','=',$equip_id)->limit(1)->find();
-            $data = $equipChangeService->dwChangeName($data);
+
             if ($data==null){
                     $this->error('没有此仪器编号记录',url('EquipChange/index'));
                 }
+
+            $data = $equipChangeService->dwChangeName($data);
+
             //上一页
             $pre = $equipChangeService->equip_pre($data['id']);
             //下一页
@@ -81,9 +84,9 @@ class EquipChangeController extends AdminBaseController
     public function update()
     {
 
-        $BdkModel = new BdkModel();
-        $equipModel = new EquipmentModel();
-        $dwModel = new DwModel();
+        $BdkModel = $this->bdk();
+        $dwModel =$this->dw();
+        $equipModel  =   $this->roles();
 
         $status = $this->request->param('status');
 
@@ -123,7 +126,7 @@ class EquipChangeController extends AdminBaseController
             $equipModel->where('equip_id','=',$data['equip_id'])->delete();
             $this->success('更新成功!');
         }
-        //如果 价格和现状 567d 没有变动  则单单更新数据
+        //如果 价格和现状 567cd 没有变动  则单单更新数据
         $data['change_date'] = date('Y-m-d');
         unset($data['price']);
         $equipModel->save($data, ['equip_id' => $data['equip_id']]);
@@ -135,7 +138,9 @@ class EquipChangeController extends AdminBaseController
     public function BatchPriceEdit()
     {
         $param = $this->request->param();
+
         $equipChangeService = new EquipChangeService();
+
         $orders = $equipChangeService->sort();
 
         if(!empty($param['receive_id']) || !empty($param['start_time'])|| !empty($param['start_price'])|| !empty($param['keyword'])){
@@ -174,9 +179,11 @@ class EquipChangeController extends AdminBaseController
         $param =  $this->request->param();
 //    return var_dump($param);
         $equipChangeService = new EquipChangeService();
-        $equipModel = new EquipmentModel();
-        $bdkModel   =  new BdkModel();
-        $dwModel   =  new DwModel();
+        $equipModel =  $this->roles();
+        $bdkModel   =  $this->bdk();
+        $dwModel   =  $this->dw();
+
+
         //需要修改的所有设备信息
         $data = $equipChangeService->equipId($param);
 
@@ -253,9 +260,10 @@ class EquipChangeController extends AdminBaseController
         $param =  $this->request->param();
 
         $equipChangeService = new EquipChangeService();
-        $equipModel = new EquipmentModel();
-        $bdkModel   =  new BdkModel();
-        $dwModel   =  new DwModel();
+        $equipModel =  $this->roles();
+        $bdkModel   =  $this->bdk();
+        $dwModel   =  $this->dw();
+
         //需要修改的所有设备信息
         $data = $equipChangeService->equipId($param);
         //变动时间
@@ -307,6 +315,7 @@ class EquipChangeController extends AdminBaseController
         $param = $this->request->param();
 
         $equipChangeService = new EquipChangeService();
+
         $orders = $equipChangeService->sort();
         if(!empty($param['receive_id']) || !empty($param['start_time']) || !empty($param['start_price'])|| !empty($param['keyword'])){
 
@@ -345,9 +354,10 @@ class EquipChangeController extends AdminBaseController
         $param =  $this->request->param();
 
         $equipChangeService = new EquipChangeService();
-        $equipModel = new EquipmentModel();
-        $bdkModel   =  new BdkModel();
-        $dwModel   =  new DwModel();
+        $equipModel =  $this->roles();
+        $bdkModel   =  $this->bdk();
+        $dwModel   =  $this->dw();
+
 
         //需要修改的所有设备信息
         $data = $equipChangeService->equipId($param);
@@ -376,29 +386,29 @@ class EquipChangeController extends AdminBaseController
                'transfer_unit'=>$param['transfer_unit'],'keyword'=>$param['keyword'],)));
     }
 
-    //变动恢复
+    //单挑变动恢复
     public function changeRecovery()
     {
 
-        $bdModel = new BdkModel();
-        $dwModel = new DwModel();
-
+        $bdkModel   =  $this->bdk();
 
         $equipChangeService = new EquipChangeService();
 
         $id = $this->request->param('id');
+
         $equipid = $this->request->param('equip_id');
         //搜索的设备编号id
         $equip_id = $this->request->param('equipId');
         //首次点进去的页面
         if (is_null($id) && is_null($equip_id)){
 
-            $data= $bdModel->alias('b')->join('dw d','b.transfer_unit =d.id')
-                ->field('d.name as transfer_unit_name,b.*')->order('b.change_date','desc' )->find();
+            $data= $bdkModel->returnData();
 
             $data =$equipChangeService->dwName($data);
+
             //上一页
             $pre = $equipChangeService->bdk_pre($data);
+//            return var_dump($pre);
             //下一页
             $next = $equipChangeService->bdk_next($data);
 
@@ -412,7 +422,7 @@ class EquipChangeController extends AdminBaseController
         //如果是搜索功能
         }elseif (is_null($id) && !is_null($equip_id)){
 
-            $data= $bdModel->where('equip_id','=',$equip_id)->order('change_date','DESC' )->find();
+            $data= $bdkModel->where('equip_id','=',$equip_id)->order('change_date','DESC' )->find();
             if ($data==null){
                 $this->error('没有此仪器编号记录',url('EquipChange/changeRecovery'));
             }
@@ -433,7 +443,7 @@ class EquipChangeController extends AdminBaseController
 
         }else{
             //当前设备数据
-            $data= $bdModel->where('equip_id','=',$equipid)->where('id','=',$id)->order('change_date','DESC' )->find();
+            $data= $bdkModel->where('equip_id','=',$equipid)->where('id','=',$id)->order('change_date','DESC' )->find();
             $data =$equipChangeService->dwName($data);
 
            //上一页
@@ -461,8 +471,9 @@ class EquipChangeController extends AdminBaseController
     //设备信息变动恢复
     public function Recovery()
     {
-        $bdModel = new BdkModel();
-        $equipModel = new EquipmentModel();
+        $equipModel =  $this->roles();
+        $bdkModel   =  $this->bdk();
+        $dwModel   =  $this->dw();
 
         $param = $this->request->param();
         //单价变动 恢复
@@ -473,7 +484,7 @@ class EquipChangeController extends AdminBaseController
            if ($data){
                $price = $data['price'] - $param['change_price'];
                 $equipModel->where('equip_id', '=', $param['equip_id'])->update(['price'=>$price]);
-                $bdModel->where("id",'=',$param['id'])->delete();
+               $bdkModel->where("id",'=',$param['id'])->delete();
                $this->success('变动成功！',url('EquipChange/changeRecovery'));
            }else{
                $this->error('仪器在主机库中不存在！可能已经报废、丢失、调出、或退库，无法恢复');
@@ -484,22 +495,22 @@ class EquipChangeController extends AdminBaseController
         //如果变动恢复状态为567 D   则直接恢复到设备库中 并且变动库中记录删除
        if ($param['status']  == 5 || $param['status']  == 6 || $param['status']  == 7 || $param['status']  == "D"){
 
-           $data =$bdModel->where('equip_id','=',$param['equip_id'])->order('id','DESC' )->find()->toArray();
+           $data =$bdkModel->where('equip_id','=',$param['equip_id'])->order('id','DESC' )->find()->toArray();
            $data['status'] ='1';
            //设备信息在变动库的id
            $bdkId = $data['id'];
            unset($data['id']);
            $equipModel->allowField(true)->save($data);
-            $bdModel->where('id' ,'=',$bdkId)->delete();
+           $bdkModel->where('id' ,'=',$bdkId)->delete();
            $this->success('变动成功！',url('EquipChange/changeRecovery'));
        }
 
         //单位转出操作恢复
        if($param['status'] == 'C'){
            //恢复的单位id
-           $uint_id = $bdModel->where('id','=',$param['id'])->value('receive_id');
+           $uint_id = $bdkModel->where('id','=',$param['id'])->value('receive_id');
            $equipModel->where('equip_id', '=', $param['equip_id'])->update(['receive_id'=>$uint_id,'status'=>1]);
-           $bdModel->where('id','=',$param['id'])->delete();
+           $bdkModel->where('id','=',$param['id'])->delete();
            $this->success('变动成功！',url('EquipChange/changeRecovery'));
        }
         $this->error('变动失败！请重新尝试！');

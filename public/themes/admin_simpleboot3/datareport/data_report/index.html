@@ -1,0 +1,123 @@
+<include file="public@header"/>
+<include file="public@modelJs"/>
+<!DOCTYPE html>
+<html lang="ch"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link href="__STATIC__/css/dsSelect.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="__STATIC__/js/dsSelect.js"></script>
+</head>
+<style>
+    li {
+    text-align: left;
+        padding-left: 40px;
+    }
+</style>
+<body>
+<p style="text-align: center;font-size: 40px;padding: 10px  0;font-weight: bold">选择上报单位</p>
+<span style="margin-left: 300px;font-size: 17px;font-weight: bold">可选单位:</span>
+<span style="margin-left: 450px;font-size: 17px;font-weight: bold">已选单位:</span>
+<div style="width:1000px; margin: 0px auto;">
+
+    <!--正文-->
+    <div class="dsSelect" id="dsSelectTemp">
+
+        <div class="left" >
+            <ul>
+            </ul>
+        </div>
+
+        <div class="center">
+            <div class="dsButton selectRight"> &gt; </div>
+            <div class="dsButton selectLeft"> &lt; </div>
+            <div class="dsButton allRight"> &gt;&gt;&gt; </div>
+            <div class="dsButton allLeft"> &lt;&lt;&lt; </div></div>
+
+        <div class="right">
+            <ul >
+            </ul>
+        </div>
+    </div>
+    <div class="form-group "  >
+        <div class="col-sm-offset-2 col-sm-7 margin-top-20 " style="margin-left: 380px">
+            <button type="submit" class="btn btn-primary js-ajax-submit" onclick="rightValues()" >确定上报单位</button>
+        </div>
+    </div>
+</div>
+
+<!--<button onclick="leftValues()">获取左侧数据</button>-->
+<!--<button onclick="rightValues()">获取右侧数据</button>-->
+</body>
+<script>
+        let dsSelectObj = new dsSelect("dsSelectTemp");
+        dsSelectObj.multiSelect = true;
+        dsSelectObj.init();
+
+        let leftData = []
+        let rightData = []
+
+        var  data
+        //设置同步
+        $.ajaxSetup({async: false});
+        //获取全部单位信息
+        $.post('/api/equipment/reportDw',function (data){
+            leftData =  data
+        });
+        //上一次的上报单位
+        $.post('/api/equipment/oldReportDw',function (data){
+            rightData = data
+            // console.log(rightData)
+        });
+
+
+        dsSelectObj.setLeftData(leftData, "names");
+
+        //默认从数据库查找历史的上报单位
+        dsSelectObj.setRightData(rightData, "names");
+
+        // function leftValues() {
+        //     alert(JSON.stringify(dsSelectObj.getSelectLeftValus()));
+        // }
+        function rightValues() {
+             datas = JSON.stringify(dsSelectObj.getSelectRightValus());
+
+            $.post('/api/equipment/saveReport',{data:datas},function (response){
+                alert(response.message)
+                console.log(datas)
+                window.location.reload()
+            });
+        }
+
+        $("ul li").dblclick(function(){
+            //获取当前已经选中的单位
+            let data = dsSelectObj.getSelectRightValus()
+
+                let b = $(this).parent().parent().attr('class');
+                if(b=="left"){
+                    let a = $(this).clone(true);
+                    //获取单位id
+                    let name = $(this).attr('u');
+                    for (let i = 0; i < data.length; i++) {
+                         let id = data[i].id
+                        //判断选择的单位是否是已选择的父级单位或者是子单位
+
+                        let flag =      name.indexOf(id) ?  false :true
+                        let flag1  =    id.indexOf(name) ? false :true
+
+                      if (flag || flag1){
+                          alert('所选的单位有误，请重新选择！')
+                          return;
+                      }
+                    }
+                    $(".right .dsList").append(a);
+                    $(this).remove()
+                }
+                else{
+                    let a = $(this).clone(true);
+                    $(".left .dsList").append(a);
+                    $(this).remove()
+
+                }
+            }
+        )
+</script>
+</html>

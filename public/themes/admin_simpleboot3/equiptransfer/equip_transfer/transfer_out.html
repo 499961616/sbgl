@@ -1,0 +1,91 @@
+<include file="public@header"/>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        .pagination{
+            margin: 5px 0px;
+        }
+        .node_name{
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">转出设备</a></li>
+
+    </ul>
+
+    <form class="js-ajax-form" action="" method="post">
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                </th>
+                <th>ID</th>
+                <th>转入方</th>
+                <th>旧仪器编号</th>
+                <th>仪器编号</th>
+                <th>调转时间</th>
+                <th >状态</th>
+                <th width="150px">操作</th>
+            </tr>
+            </thead>
+
+            <foreach name="data" item="vo" >
+                <tr>
+                    <td>
+                        {$vo['id']}
+                    </td>
+
+                    <td>
+                        <if condition="$vo['transfer_to'] eq 3 "><span><b>行政处管理员</b></span>
+                            <else  />   <span><b>实验室管理员</b></span>
+                        </if>
+
+                    </td>
+                    <td>
+                        {$vo['old_equip']}
+                    </td>
+                    <td>
+                        <if condition="$vo['status'] eq 0  ">
+                        <a href="{:url('equip/Equipment/outShow',array('equip_id'=>$vo['equip_id'],'id'=>$vo['id']))}">  {$vo['equip_id']}</a>
+                            <else /><a href ="javascript:return false;" style="color: gray">  {$vo['equip_id']}</a>
+                        </if>
+                    </td>
+                    <td>
+                        {$vo['transfer_date']}
+
+                    </td>
+
+                    <td>
+                        <if condition="$vo['status'] eq 0  "> <button class="btn btn-warning" disabled="disabled">调转中</button>
+                            <elseif condition="$vo['status'] eq 1"/><button class="btn btn-success" disabled="disabled">调转成功</button>
+                            <else /> <button class="btn btn-danger" disabled="disabled">对方拒绝调拨</button>
+                        </if>
+                    </td>
+
+                    <td>
+
+
+                        <if condition="$vo['status'] eq 0  ">
+                            <a class=" btn  btn-primary" onClick="return confirm('确定要撤回调拨设备?')"  href="{:url('EquipTransfer/transferDel',array('id'=>$vo['id']))}" >撤回调转</a>
+
+                            <elseif condition="$vo['status'] eq 1"/><button class="btn btn-success" disabled="disabled">调转成功,无法操作</button>
+                            <else /><button class="btn btn-danger" disabled="disabled">调转失败,无法操作</button>
+                        </if>
+                    </td>
+                </tr>
+            </foreach>
+
+
+        </table>
+    </form>
+
+</div>
+</body>
+</html>

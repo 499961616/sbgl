@@ -10,6 +10,12 @@
 // +----------------------------------------------------------------------
 namespace cmf\controller;
 
+use app\equip\model\BdkModel;
+use app\equip\model\DwModel;
+use app\equip\model\EquipmentModel;
+use app\equip\model\XzcBdkModel;
+use app\equip\model\XzcDwModel;
+use app\equip\model\XzcEquipmentModel;
 use think\Db;
 
 class AdminBaseController extends BaseController
@@ -100,5 +106,158 @@ class AdminBaseController extends BaseController
             return true;
         }
     }
+
+
+    /**
+     *  判断用户权限
+     */
+    public function roles()
+    {
+
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        //判断是那个管理员   就对应哪个数据库
+        if ($user_role == 2 || $user_role == 4){
+            //是实验室管理员 就对应这实验室的数据库模型
+          return  $this->equipModel  = new EquipmentModel();
+
+        }elseif ($user_role ==3 || $user_role == 5){
+            //是行政处管理员 就对应行政处的数据库模型
+
+            return  $this->equipModel  = new XzcEquipmentModel();
+        }else{
+            //  默认是实验室的模型
+            return  $this->equipModel  = new EquipmentModel();
+        }
+     }
+
+    /**
+     *  对方的  数据库模型
+     */
+    public function otherRole()
+    {
+
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        //判断是那个管理员   就对应哪个数据库
+        if ($user_role == 2 || $user_role == 4){
+            //是实验室管理员 就对应这实验室的数据库模型
+            return  $this->equipModel  = new XzcEquipmentModel();
+
+
+        }elseif ($user_role ==3 || $user_role == 5){
+            //是行政处管理员 就对应行政处的数据库模型
+            return  $this->equipModel  = new EquipmentModel();
+
+        }else{
+            //  默认是实验室的模型
+            return  $this->equipModel  = new EquipmentModel();
+        }
+    }
+
+
+
+
+
+    /**
+     *  判断用户权限 来实现单位选择
+     */
+
+    public function dw()
+    {
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        //判断是那个管理员   就对应哪个数据库
+        if ($user_role == 2 || $user_role == 4){
+
+            //是实验室管理员 就对应这实验室的数据库模型
+            return  $this->dwModel  =  new DwModel();
+
+        }elseif ($user_role ==3 || $user_role == 5){
+
+            //是行政处管理员 就对应行政处的数据库模型
+            return  $this->dwModel  =  new XzcDwModel();
+        }
+        //  默认是实验室的模型
+        return $this->dwModel  =  new DwModel();
+
+    }
+
+
+    /**
+     *  判断用户权限 来实现对方的单位库
+     */
+
+    public function otherDw()
+    {
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        //判断是那个管理员   就对应哪个数据库
+        if ($user_role == 2 || $user_role == 4){
+
+
+            return  $this->dwModel  =  new XzcDwModel();
+
+        }elseif ($user_role ==3 || $user_role == 5){
+
+
+            return  $this->dwModel  =  new DwModel();
+
+        }
+        //  默认是实验室的模型
+        return $this->dwModel  =  new DwModel();
+
+    }
+
+
+
+    /**
+     *  判断用户权限 来实现变动库数据库选择
+     */
+
+    public function bdk()
+    {
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        //判断是那个管理员   就对应哪个变动库数据库
+        if ($user_role == 2 || $user_role == 4){
+            //是实验室管理员 就对应这实验室的变动库数据库模型
+            return    $this->BdkModel  =  new BdkModel();
+
+        }elseif ($user_role ==3 || $user_role == 5){
+            //是行政处管理员 就对应行政处的变动库数据库模型
+            return  $this->BdkModel  =  new XzcBdkModel();
+
+        }else{
+            //  默认是实验室的变动库模型
+            return  $this->BdkModel  = new BdkModel();
+        }
+    }
+
+    /**
+     *  判断用户权限 对方的变动数据模型
+     */
+
+    public function otherBdk()
+    {
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        if ($user_role == 2 || $user_role == 4){
+            return  $this->BdkModel  =  new XzcBdkModel();
+
+        }elseif ($user_role ==3 || $user_role == 5){
+            return    $this->BdkModel  =  new BdkModel();
+
+        }else{
+            return  $this->BdkModel  = new BdkModel();
+        }
+    }
+
 
 }

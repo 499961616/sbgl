@@ -7,7 +7,11 @@ use app\equip\model\BdkModel;
 use app\equip\model\DwModel;
 use app\equip\model\EquipmentModel;
 use app\equip\model\MkModel;
+use app\equip\model\XzcBdkModel;
+use app\equip\model\XzcDwModel;
+use app\equip\model\XzcEquipmentModel;
 use app\preciousequip\model\PreciousEquipModel;
+use think\Db;
 use think\db\Query;
 
 /**
@@ -18,14 +22,39 @@ class EquipChangeService
 {
     protected  $equipModel;
     protected  $equipMkModel;
-    protected  $bdkMkModel;
+    protected  $bdkModel;
     protected  $dwModel;
+    protected  $user_role ;
+
     public function __construct()
     {
-        $this->equipModel  = new EquipmentModel();
-        $this->equipMkModel  = new MkModel();
-        $this->bdkMkModel  = new BdkModel();
-        $this->dwModel = new DwModel();
+        $user_id  =  cmf_get_current_admin_id();
+
+        $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+
+        $this-> $user_role = Db::table('cmf_role_user')->where('user_id',$user_id)->value('role_id');
+        //判断是那个管理员   就对应哪个数据库
+        if ($user_role == 2 || $user_role == 4){
+
+            $this->equipModel    = new EquipmentModel();
+            $this->bdkModel    = new BdkModel();
+            $this->dwModel       =new DwModel();
+            $this->equipMkModel  =new MkModel();
+
+        }elseif ($user_role ==3 || $user_role == 5){
+
+            $this->equipModel    = new XzcEquipmentModel();
+            $this->bdkModel    = new XzcBdkModel();
+            $this->dwModel       = new XzcDwModel();
+            $this->equipMkModel  = new MkModel();
+        }else{
+            $this->equipModel       = new EquipmentModel();
+            $this->bdkModel       = new BdkModel();
+            $this->dwModel          = new DwModel();
+            $this->equipMkModel     = new MkModel();
+        }
+
+
     }
 
     /**
@@ -39,7 +68,7 @@ class EquipChangeService
             //给Equipment起一 个别名
             ->alias('e')
             //关联查询单位表 取名d  将设备表的 领用单位id 等于 单位表的ID
-            ->join('Dw d','e.receive_id = d.id')
+            ->join("$this->Dw d",'e.receive_id = d.id')
             //条件筛选  分为三个条件
             ->where(function (Query $query) use ($filter) {
                 // 1。领用单位id
@@ -73,6 +102,7 @@ class EquipChangeService
                 //仪器编号范围
                 $equipIdFrom = empty($filter['equip_id_from']) ? 0 : $filter['equip_id_from'];
                 $equipIdTo   = empty($filter['equip_id_to'])   ? 0 : $filter['equip_id_to'];
+
                 if (!empty($equipIdFrom)) {
                     $query->where('equip_id', '>=', $equipIdFrom);
                 }
@@ -224,7 +254,7 @@ class EquipChangeService
      */
     public function bdk_pre($data)
     {
-        return $pre_info = $this->bdkMkModel
+        return$this->bdkModel
             ->where('equip_id','<=',$data['equip_id'])
             ->where('id','<',$data['id'])
             ->order('equip_id','desc')->find();
@@ -237,7 +267,7 @@ class EquipChangeService
 
     public function bdk_next($data)
     {
-        return $next_info = $this->bdkMkModel
+        return  $this->bdkModel
             ->where('equip_id','>=',$data['equip_id'])
             ->where('id','>',$data['id'])
             ->order('equip_id')->find();
@@ -251,7 +281,7 @@ class EquipChangeService
     public function bdCount($id)
     {
 
-        return $total =  count($this->bdkMkModel->where('equip_id','=',$id)->select());
+        return $total =  count($this->bdkModel->where('equip_id','=',$id)->select());
     }
 
 
@@ -299,8 +329,8 @@ class EquipChangeService
     public function dwName($data)
     {
         $data['transfer_unit_name'] = empty($data['transfer_unit']) ? '':$data['transfer_unit'].'-'.$this->dwModel->dwName($data['transfer_unit']);
-        $data['receive_name']         = empty($data['receive_id'])  ? ''  :$data['receive_id'].'-'.   $this->dwModel->dwName($data['receive_id']);
-        $data['useunit_name']        = empty($data['useunit_num']) ? ''  :$data['useunit_num'].'-'   .$this->dwModel->dwName($data['useunit_num']);
+        $data['receive_name']       = empty($data['receive_id'])  ? ''  :$data['receive_id'].'-'.   $this->dwModel->dwName($data['receive_id']);
+        $data['useunit_name']       = empty($data['useunit_num']) ? ''  :$data['useunit_num'].'-'   .$this->dwModel->dwName($data['useunit_num']);
 
         return $data;
     }
@@ -311,8 +341,8 @@ class EquipChangeService
      */
     public function dwChangeName($data)
     {
-        $data['receive_name']         = empty($data['receive_id'])  ? ''  :$data['receive_id'].'-'.   $this->dwModel->dwName($data['receive_id']);
-        $data['useunit_name']        = empty($data['useunit_num']) ? ''  :$data['useunit_num'].'-'   .$this->dwModel->dwName($data['useunit_num']);
+        $data['receive_name']   = empty($data['receive_id'])  ? ''  :$data['receive_id'].'-'.   $this->dwModel->dwName($data['receive_id']);
+        $data['useunit_name']   = empty($data['useunit_num']) ? ''  :$data['useunit_num'].'-'   .$this->dwModel->dwName($data['useunit_num']);
 
         return $data;
     }

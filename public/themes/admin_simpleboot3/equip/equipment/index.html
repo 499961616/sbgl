@@ -36,7 +36,7 @@
                 <th>经手人</th>
                 <th>价格</th>
                 <th>入库时间</th>
-                <th>操作</th>
+                <th width="120px">操作</th>
             </tr>
             </thead>
 
@@ -74,9 +74,9 @@
                             <td>
                                 {$vo['torage_time']}
                             </td>
-
-                        <td>
-                            <a class=" btn btn-xs btn-primary"  href="{:url('Equipment/edit',array('equip_id'=>$vo['equip_id']))}">{:lang('EDIT')}</a>
+                            <td>
+                            <a class=" btn btn-xs btn-primary"  href="{:url('Equipment/edit',array('equip_id'=>$vo['equip_id']))}">{:lang('EDIT')}</a>&nbsp;&nbsp;
+                            <a class=" btn btn-xs btn-primary" onClick="return confirm('确定要调拨设备?')"  href="{:url('Equipment/transfer',array('equip_id'=>$vo['equip_id']))}" >调拨</a>
                         </td>
                     </tr>
                 </foreach>

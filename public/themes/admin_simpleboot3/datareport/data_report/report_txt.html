@@ -1,0 +1,277 @@
+<include file="public@header"/>
+<include file="public@modelJs"/>
+</head>
+<body>
+<div class="wrap " style="margin: 0 auto;width: 70%">
+    <div class="header" style="text-align: center;font-size: 40px;font-weight: bold;margin-bottom: 30px">教育部实验室信息上报</div>
+
+    <div class="body table-bordered">
+
+        <div class="first">
+            <span  style="font-size: 20px;">1.教学科研仪器设备表(SJ1)</span>
+
+            <form   class="form-inline well " style=" text-align:center;margin: 20px auto;padding: 30px 30px">
+                <div class="form-group">
+                    <label >学校代码:</label>
+                    <input type="text" style="width: 80px"  class="form-control" name="schoolCode" value="13468">
+                </div>
+                <div class="form-group">
+                    <label>上报文件名:</label>
+                    <input type="text" style="width: 100px" class="form-control reportTxt1" name="reportTxt" value="SJ113468">
+                </div>
+                <div class="form-group">
+                    <label >上报日期:</label>
+                    <input type="text" class="form-control" name="star_time" value="0.0.0" >至
+                    <input type="text" class="form-control date" name="end_time" >
+                </div>
+                <button type="submit" onclick="download(1)" class="btn btn-primary  js-ajax-submit">导出上报文本</button>
+            </form>
+        </div>
+        <div class="second">
+            <span style="font-size: 20px;">2.教学科研仪器增减变动情况表(SJ2)</span>
+            <form   class="form-inline well js-ajax-form"  style=" text-align:center;margin: 20px auto;padding: 30px 30px">
+                <div class="form-group">
+                    <label >学校代码:</label>
+                    <input type="text" style="width: 80px"  class="form-control" name="schoolCode" value="13468">
+                </div>
+                <div class="form-group">
+                    <label>上报文件名:</label>
+                    <input type="text" style="width: 100px" class="form-control reportTxt2" name="reportTxt2" value="SJ213468">
+                </div>
+                <div class="form-group">
+                    <label >上报日期:</label>
+                    <input type="text" class="form-control lastYear" name="star_time" >至
+                    <input type="text"   class="form-control date" name="end_time" >
+                </div>
+                <button type="submit" onclick="download(2)" class="btn btn-primary  ">导出上报文本</button>
+
+
+            </form>
+
+        </div>
+        <div class="third">
+
+            <span style="font-size: 20px;">3.教学科研精密贵重仪器设备表(SJ3)</span>
+            <form  method="post" class="form-inline well js-ajax-form"  style=" text-align:center;margin: 20px auto;padding: 30px 30px">
+                <div class="form-group">
+                    <label >学校代码:</label>
+                    <input type="text" style="width: 80px"  class="form-control schoolCode" name="schoolCode" value="13468">
+                </div>
+                <div class="form-group">
+                    <label>上报文件名:</label>
+                    <input type="text" style="width: 100px" class="form-control reportTxt3" name="reportTxt3" value="SJ313468">
+                </div>
+                <div class="form-group">
+                    <label >上报日期:</label>
+                    <input type="text" class="form-control lastYear star_time" name="star_time" >至
+                    <input type="text"   class="form-control date end_time" name="end_time" >
+                </div>
+                <button type="submit" onclick="download(3)" class="btn btn-primary ">导出上报文本</button>
+
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="__STATIC__/js/admin.js"></script>
+
+        <script language="JavaScript">
+
+            let today=new Date();
+            let submitTime=today.getFullYear()+'.'+'08.'+'31';
+            let lastYear=today.getFullYear()-1+'.'+'09.'+'01';
+            $(".date").attr('value',submitTime);
+            $(".lastYear").attr('value',lastYear);
+
+        //打印数据txt文本
+            function download(type) {
+                var pom = document.createElement('a');
+
+                if (type==1){
+
+                    let textData
+                    let filename   = $('.reportTxt1').val();
+                    let schoolCode = $('.schoolCode').val();
+
+                    let  datas = {
+                            'type'      :1,
+                            'filename' : filename,
+                            'schoolCode' : schoolCode,
+                            }
+                    $.ajax({
+                        url: "/api/equipment/ReportTxt/typeOne",
+                        async: false,//改为同步方式
+                        type: "POST",
+                        data: datas,
+                        success: function (data) {
+                            textData = data;
+                        }
+                     });
+
+
+                    function  strlen(str) {    //传入一个字符串
+                            let byteLen = 0;
+                            for ( var i = 0; i < str.length; i++) {
+                                if (str.charCodeAt(i) > 255) {
+                                    byteLen += 2;
+                                } else {
+                                    byteLen += 1;
+                                }
+                            }
+                            return byteLen;
+                        }
+
+                        let  txt = ''
+                        for (let i=0;i<textData.length;i++) {
+                            //第一列格式
+                            let row = schoolCode + textData[i].equip_id + textData[i].sort_id + textData[i].equip_name;
+                            if (strlen(row) < 60) {
+                                for ( let j = 0; j < 60 - strlen(row); j++) {
+                                    row += ' ';
+                                }
+                                txt += row;
+                            }
+
+                            //型号
+                            let model = textData[i].model
+                            if (strlen(model) < 40) {
+                                for ( let j = 0; j < 40 - strlen(model); j++) {
+                                    model += ' ';
+                                }
+                                txt += model;
+                            }
+
+                            //规格
+                            let   secondRow =   textData[i].size
+                            if (strlen(secondRow) < 40) {
+                                for ( let j = 0; j < 40 - strlen(secondRow); j++) {
+                                    secondRow += ' ';
+                                }
+                                txt += secondRow;
+                            }
+
+                        //入库时间去除.符号
+                          let purchase_date=  textData[i].purchase_date.replace('.','')
+                        //剩下的字段
+                            let   other =   textData[i].instrument_source + textData[i].country_code +'    '+
+                                            textData[i].price +'.00'+  purchase_date + textData[i].status  +
+                                            textData[i].use_direction+ textData[i].receive_id +'    '+textData[i].receive_name;
+
+                            txt +=other +'\n';
+                        }
+                         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt));
+                        pom.setAttribute('download', filename);
+                        if (document.createEvent) {
+                            var event = document.createEvent('MouseEvents');
+                            event.initEvent('click', true, true);
+                            pom.dispatchEvent(event);
+
+                        } else {
+                            pom.click();
+                        }
+                }else if(type == 2){
+                    alert('ddd22')
+
+
+
+
+
+                }
+                else{
+                    //第三张txt导出
+                    let textData
+                    let filename   = $('.reportTxt3').val();
+                    let schoolCode   = $('.schoolCode').val();
+                    let star_time  = $('.star_time').val();
+                    let end_time   = $('.end_time').val();
+
+                    let  data3 = {
+                        'type'      :3,
+                        'filename' : filename,
+                        'star_time' : star_time,
+                        'end_time' : end_time,
+                    }
+                    $.ajax({
+                        url: "/api/equipment/ReportTxt/typeOne",
+                        async: false,//改为同步方式
+                        type: "POST",
+                        data: data3,
+                        success: function (data) {
+                            textData = data;
+                            // console.log(data)
+                        }
+                    });
+                    function  strlen(str) {    //传入一个字符串
+                        let byteLen = 0;
+                        for ( let i = 0; i < str.length; i++) {
+                            if (str.charCodeAt(i) > 255) {
+                                byteLen += 2;
+                            } else {
+                                byteLen += 1;
+                            }
+                        }
+                        return byteLen;
+                    }
+
+                    let  txt = ''
+
+                    for (let i=0;i<textData.length;i++) {
+                        //第一列格式
+                        let row = schoolCode + textData[i].equip_id + textData[i].sort_id + textData[i].equip_name;
+                        if (strlen(row) < 60) {
+                            for ( let j = 0; j < 60 - strlen(row); j++) {
+                                row += ' ';
+                            }
+                            txt += row;
+                        }
+
+                        //价格 型号
+                        let model = textData[i].price +'.00'+textData[i].model
+                        if (strlen(model) < 40) {
+                            for ( let j = 0; j < 40 - strlen(model); j++) {
+                                model += ' ';
+                            }
+                            txt += model;
+                        }
+
+                        //规格
+                        let   secondRow =   textData[i].size
+                        if (strlen(secondRow) < 40) {
+                            for ( let j = 0; j < 40 - strlen(secondRow); j++) {
+                                secondRow += ' ';
+                            }
+                            txt += secondRow+'\n';
+                        }
+
+
+                        //剩下的字段
+                        let   other =   textData[i].teaching_time +'  '+ textData[i].research_time +'  '+
+                                        textData[i].social_service +'  '+ textData[i].other_time    +'    '+
+                                        textData[i].test_num       +'  '+ textData[i].train_student +'   '+
+                                        textData[i].train_teacher     +'  '+ textData[i].train_other +'    '+
+                                        textData[i].teach_item_num     +'  '+ textData[i].research_item_num +'   '+
+                                        textData[i].social_service_num     +'  '+ textData[i].national_award +'    '+
+                                        textData[i].provincial_award     +'   '+ textData[i].teacher_patent_num +'    '+
+                                        textData[i].student_patent_num     +'   '+ textData[i].three_major_searches +'    '+
+                                        textData[i].core_publication_num     + textData[i].employer
+                    ;
+                        txt +=other +'\n';
+                    }
+                    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt));
+                    pom.setAttribute('download', filename);
+                    if (document.createEvent) {
+                        var event = document.createEvent('MouseEvents');
+                        event.initEvent('click', true, true);
+                        pom.dispatchEvent(event);
+
+
+                }
+
+            }
+            }
+
+    </script>
+</body>
+</html>

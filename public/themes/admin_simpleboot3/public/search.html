@@ -33,7 +33,7 @@
     仪器名称:
     <input type="text" class="form-control" name="keyword" style="width: 160px;"
            value="{$keyword|default=''}" placeholder="请输入关键字...">
-    <input type="submit" id="sub" class="btn btn-primary" value="查询" disabled/>
+    <input type="submit" id="sub" class="btn btn-primary" value="查询" />
     <a class="btn btn-danger" id="clear">清空</a>
 </form>
 
@@ -52,23 +52,23 @@
         }
 
 
-
-        $("input").bind("input propertychange change", function (event) {
-
-            let receive_name = $("input[name=receive_name]").val();
-            let start_time = $("input[name=start_time]").val();
-            let keyword = $("input[name=keyword]").val();
-
-            if (receive_name == '' && start_time == '' && keyword == '') {
-                changeBtndisable();
-                // console.log(66)
-            } else {
-                changeBtnable()
-                // console.log(77)
-
-            }
-
-        })
+        //
+        // $("input").bind("input propertychange change", function (event) {
+        //
+        //     let receive_name = $("input[name=receive_name]").val();
+        //     let start_time = $("input[name=start_time]").val();
+        //     let keyword = $("input[name=keyword]").val();
+        //
+        //     if (receive_name == '' && start_time == '' && keyword == '') {
+        //         changeBtndisable();
+        //         // console.log(66)
+        //     } else {
+        //         changeBtnable()
+        //         // console.log(77)
+        //
+        //     }
+        //
+        // })
     })
 
 </script>

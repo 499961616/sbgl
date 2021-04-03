@@ -2,9 +2,11 @@
 
 
 namespace app\equip\model;
+
+
 use think\Model;
 
-class BdkModel extends Model
+class XzcBdkModel extends Model
 {
 
     //类型转换
@@ -16,10 +18,9 @@ class BdkModel extends Model
     public function returnData()
     {
       return  $this->alias('b')
-            ->join('dw d','b.transfer_unit =d.id')
-            ->field('d.name as transfer_unit_name,b.*')
-            ->order('b.change_date','desc' )
-            ->find();
+          ->join('xzc_dw d','b.transfer_unit =d.id')
+          ->field('d.name as transfer_unit_name,b.*')
+          ->order('b.change_date','desc' )
+          ->find();
     }
-
 }

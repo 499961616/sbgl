@@ -14,9 +14,10 @@ class SbmkModel extends Model
     ];
 
     //返回设备类型
-    public function searchAssetType($id)
+    public function searchAssetType($sort_id)
     {
-     return  $this->where('id',$id)->value('BZF');
+
+        return $this->where('id',$sort_id)->value('BZF');
 
     }
 

@@ -1,0 +1,150 @@
+
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="https://cdn.bootcss.com/jsbarcode/3.8.0/JsBarcode.all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<style type="text/css">
+
+    * {margin: 0;padding: 0;box-sizing: border-box;}
+    .a4-endwise{
+        width: 1075px;
+        height: 1000px;
+        overflow: hidden;
+        padding: 0;
+        word-break:break-all;
+    }
+    .a4-broadwise{
+        width: 1569px;
+        height: 1073px;
+        border: 2px #000 solid;
+        overflow: hidden;
+        padding: 0;
+        word-break:break-all;
+    }
+    .btn{
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: normal;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+    }
+    .btn-info{
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+    .btn-default{
+        color: #fff;
+        background-color: #AEA79F;
+        border-color: #AEA79F;
+    }
+    .print{
+        position: fixed;
+        top: 2%;
+        right: 10%;
+    }
+    table{
+      margin: 2px 2px;
+    }
+    h3 {text-align: center;font-size: 16px;margin: 10px;}
+    .box {text-align: center;}
+    #barcode {height: 40px}
+    .css123 {
+        top: 5px;
+        position: absolute;
+    }
+</style>
+
+
+<body  >
+<a class=" btn btn-default" style="position: fixed; top: 2%;
+        right: 15%;" href="{:url('AssetPrint/index',
+        array('receive_name'=>$param['receive_name'],'receive_id'=>$param['receive_id'],'start_time'=>$param['start_time'],'end_time'=>$param['end_time'],'start_equip_id'=>$param['start_equip_id'],'end_equip_id'=>$param['end_equip_id'],))}">返回</a>
+<a class="print btn  btn-info"  href="javascript:;" onclick="preview();">打印</a>
+
+<!--startprint-->
+
+<foreach name="data" item="vo" key="k">
+
+    <table width="220"  border="1" cellspacing="0"  bordercolor="#000000">
+        <tr>
+            <td colspan="4"  height="24" align="center">
+                <p face=隶书 size=2><b>阳光学院资产</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td width=35 align="center" bordercolor="#000000"><p size=2>名称</p></td>
+            <td colspan="3" height="17" align="center" nowrap bordercolor="#000000">
+                <font size=2><b>{$vo.equip_name}</b></font></td>
+        </tr>
+        <tr>
+            <td width=35 align="center"><p size=2>条码</p></td>
+            <td colspan="3" height="40" align="center">
+                <p size=2 >  <img  height="40px" id="{$k}" /></p>
+        </tr>
+        <tr>
+            <td height="10" width=35 align="center">
+                <p size=-1 face="仿宋_GB2312">编号</p></td>
+            <td  width="65"align="center" >
+                <font size=-1 face="仿宋_GB2312"><b class="{$k}" >{$vo.equip_id}</b></font>
+
+            </td>
+            <td width="30"><font size=2>单位</font></td>
+            <td width="80">
+
+                <b><p size=-1  >{$vo.receive_name|mb_substr=0,5,'utf-8'}</p></b></td>
+        </tr>
+    </table>
+
+</foreach>
+<!--endprint-->
+
+</body>
+<script>
+    /**
+     * [打印]
+     * @return {[type]} [description]
+     */
+    function preview()
+    {
+        bdhtml=window.document.body.innerHTML;//获取当前页的html代码
+        sprnstr="<!--startprint-->";//设置打印开始区域
+        eprnstr="<!--endprint-->";//设置打印结束区域
+        prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+18); //从开始代码向后取html
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));//从结束代码向前取html
+        window.document.body.innerHTML=prnhtml;
+        window.print();
+        window.document.body.innerHTML=bdhtml;
+    }
+
+    window.onload = function (){
+
+    //获取条形码的张数
+    let tableLen = document.getElementsByTagName('table').length;
+    //循环打印出条形码
+    for (let num =0;num<tableLen;num++){
+        var barcode =  document.getElementById(num),
+            str = document.getElementsByClassName(num)[0].innerHTML,
+            options = {
+                format: "CODE128",
+                displayValue: false,
+                fontSize: 16,
+                height: 80
+            };
+
+        JsBarcode(barcode, str, options); //原生
+     }
+
+    }
+</script>
+</html>
