@@ -38,8 +38,8 @@ https://www.kancloud.cn/thinkcmf/theme_tutorial
 - cmf_mk  名库表
 - cmf_yrk  学校单位老师库
 - cmf_sbmk  设备名库表
-
-
+- cmf_transfer 设备调拨表
+- cmf_report 设备上报单位表
 
 
 # 模块功能
@@ -133,4 +133,4 @@ https://www.kancloud.cn/thinkcmf/theme_tutorial
      - 只能查看本单位的设备，并且进行打印          
      - 实验室管理员帐号：sy2401  密码：qqqwww   账号名必须sy开头 后面接单位编号
      - 行政处管理员帐号：xz2401  密码：qqqwww   账号名必须sy开头 后面接单位编号
-     - ![image-20210703143121236](/Users/linliangfeng/Library/Application Support/typora-user-images/image-20210703143121236.png)
+    
