@@ -132,5 +132,5 @@ https://www.kancloud.cn/thinkcmf/theme_tutorial
 *   **单位二级管理员**
      - 只能查看本单位的设备，并且进行打印          
      - 实验室管理员帐号：sy2401  密码：qqqwww   账号名必须sy开头 后面接单位编号
-     - 行政处管理员帐号：xz2401  密码：qqqwww   账号名必须sy开头 后面接单位编号
+     - 行政处管理员帐号：xz2401  密码：qqqwww   账号名必须xz开头 后面接单位编号
     
